@@ -1,0 +1,2348 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muros de Contención en Voladizo | Criterio Estructural</title>
+    
+    <!-- CSS Institucional y W3 para grillas -->
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Google Fonts: Inter & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1A2530;      
+            --secondary: #5C6D7E;    
+            --accent: #E67E22;       
+            --warning: #D9534F;      
+            --success: #1E8449;
+            
+            --text-main: #1A2530;
+            --text-muted: #637381;
+            
+            --bg-main: #F3F5F7;      
+            --bg-panel: #FFFFFF;     
+            --border-light: #E2E7EC; 
+        }
+
+        body { 
+            background: var(--bg-main); 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            color: var(--text-main); 
+            min-height: 100vh; 
+            margin: 0;
+            font-variant-numeric: tabular-nums; 
+            line-height: 1.5;
+        }
+
+        .mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .contenedor-principal { 
+            max-width: 1440px; 
+            margin: 0 auto 30px auto; 
+            padding: 0 15px;
+        }
+
+        /* HEADER TÉCNICO INSTITUCIONAL */
+        .header-ce { 
+            background: var(--primary);
+            color: #FFFFFF; 
+            padding: 28px 40px; 
+            border-radius: 0px;
+            margin-bottom: 24px;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            margin-right: calc(-50vw + 50%);
+            box-sizing: border-box;
+        }
+        .header-ce h1 {
+            margin: 0; 
+            font-weight: 600; 
+            font-size: 1.5em;
+            letter-spacing: -0.5px;
+        }
+        .header-ce p {
+            margin: 4px 0 0 0; 
+            color: #A0ABB5; 
+            font-size: 0.9em;
+            font-weight: 400;
+        }
+        .brand-logo-header {
+            max-width: 360px;
+            margin-bottom: 10px;
+            display: block;
+            filter: brightness(0) invert(1);
+        }
+        .brand-logo-footer {
+            max-width: 240px;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        /* PANELES LIMPIOS */
+        .panel-card { 
+            background: var(--bg-panel); 
+            border-radius: 6px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 4px rgba(26, 37, 48, 0.03); 
+        }
+
+        .titulo-seccion { 
+            border-bottom: 1px solid var(--border-light); 
+            padding-bottom: 12px; 
+            color: var(--primary); 
+            font-weight: 600; 
+            font-size: 1.05em; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .titulo-seccion i { 
+            color: var(--secondary); 
+            margin-right: 8px; 
+        }
+
+        /* CAJAS DE RESULTADOS Y ALERTAS */
+        .caja-metrica { 
+            background: #FAFBFC; 
+            padding: 12px 16px; 
+            border-radius: 4px; 
+            margin-bottom: 12px; 
+            font-size: 0.9em;
+            border: 1px solid var(--border-light);
+            transition: all 0.25s ease;
+        }
+        .caja-alerta {
+            background-color: #FFF5F5 !important;
+            border-color: #FCA5A5 !important;
+            box-shadow: 0 0 10px rgba(217, 83, 79, 0.18) !important;
+        }
+        .alerta-interna {
+            margin-top: 10px;
+            font-size: 0.85em;
+            color: #991B1B;
+            font-weight: 500;
+            line-height: 1.4;
+            background: rgba(254, 226, 226, 0.65);
+            padding: 8px 10px;
+            border-radius: 4px;
+            border: 1px dashed #EF4444;
+        }
+
+        /* BADGES DE ESTADO */
+        .badge-ok {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78em;
+            font-weight: 600;
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #A7F3D0;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .badge-fail {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78em;
+            font-weight: 600;
+            background: #FEF2F2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .badge-info {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.78em;
+            font-weight: 600;
+            background: #FFF7ED;
+            color: #9A3412;
+            border: 1px solid #FED7AA;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* TIPOGRAFÍA RESULTADOS */
+        .valor-sutil {
+            color: var(--text-muted);
+            font-weight: 500;
+            font-size: 0.88em;
+        }
+        .valor-sutil span {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+        .valor-protag {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--primary);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* INPUTS Y SELECTS */
+        label.lbl-ce { 
+            font-weight: 600; 
+            color: var(--secondary); 
+            font-size: 0.74em; 
+            text-transform: uppercase; 
+            letter-spacing: 0.4px; 
+            display: block; 
+            margin-bottom: 5px; 
+        }
+        .w3-input, .w3-select { 
+            border: 1px solid var(--border-light) !important; 
+            background: #FFFFFF !important; 
+            border-radius: 4px !important; 
+            padding: 7px 10px !important; 
+            transition: all 0.2s ease; 
+            color: var(--text-main) !important;
+            font-weight: 500;
+            font-size: 0.88em !important;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .w3-select {
+            font-family: 'Inter', sans-serif;
+        }
+        .w3-input:focus, .w3-select:focus { 
+            outline: none; 
+            border-color: var(--accent) !important; 
+            box-shadow: 0 0 0 2px rgba(230, 126, 34, 0.15) !important; 
+        }
+        .w3-input:disabled {
+            background: #F3F5F7 !important;
+            color: var(--text-muted) !important;
+        }
+
+        /* PESTAÑAS TÉCNICAS */
+        .tabs-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            background: var(--bg-panel);
+            padding: 8px;
+            border-radius: 6px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 4px rgba(26, 37, 48, 0.03);
+        }
+        .tab-btn {
+            flex: 1;
+            min-width: 155px;
+            padding: 9px 12px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+            background: transparent;
+            color: var(--secondary);
+            font-weight: 600;
+            font-size: 0.85em;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: center;
+        }
+        .tab-btn:hover {
+            background: var(--bg-main);
+            color: var(--primary);
+        }
+        .tab-btn.active {
+            background: var(--primary);
+            color: #FFFFFF;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        /* TABLAS TÉCNICAS */
+        .tabla-ce { 
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid var(--border-light); 
+            background: #FFFFFF;
+            border-radius: 4px;
+            overflow: hidden;
+            font-size: 0.83em;
+        }
+        .tabla-ce tr:nth-child(even) { background: #FAFBFC; }
+        .tabla-ce tr:nth-child(odd) { background: #FFFFFF; }
+        .tabla-ce th { 
+            background: #F3F5F7; 
+            color: var(--secondary); 
+            border-bottom: 1px solid var(--border-light); 
+            font-size: 0.82em; 
+            letter-spacing: 0.4px;
+            padding: 9px 8px;
+            font-weight: 600;
+            text-align: left;
+        }
+        .tabla-ce td { 
+            border-bottom: 1px solid var(--border-light); 
+            padding: 7px 8px; 
+            vertical-align: middle;
+        }
+        .fila-destacada {
+            background: #ECFDF5 !important;
+            font-weight: 600;
+        }
+        .fila-gobernante {
+            background: #FFF7ED !important;
+            font-weight: 600;
+        }
+
+        /* BOTONES */
+        .btn-ce { 
+            background: var(--bg-main); 
+            color: var(--primary) !important; 
+            font-weight: 500; 
+            border: 1px solid var(--border-light);
+            border-radius: 4px; 
+            transition: 0.2s; 
+            cursor: pointer; 
+            padding: 6px 12px;
+            font-size: 0.82em;
+        }
+        .btn-ce:hover { 
+            background: var(--border-light);
+        }
+        .btn-magico {
+            background: var(--accent);
+            color: #FFFFFF !important;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: 0.2s;
+            cursor: pointer;
+            border: none;
+            padding: 8px 14px;
+            font-size: 0.85em;
+        }
+        .btn-magico:hover {
+            background: #D67118;
+        }
+
+        /* NOTAS Y AVISOS */
+        .nota-tecnica {
+            color: var(--secondary);
+            font-size: 0.8em;
+            background: #F3F5F7;
+            padding: 8px 10px;
+            border-radius: 4px;
+            margin-top: 8px;
+            line-height: 1.45;
+        }
+        .aviso-informativo {
+            background: #F8FAFC; 
+            color: var(--text-muted);
+            border-radius: 4px;
+            padding: 14px 18px;
+            font-size: 0.85em;
+            margin-top: 15px;
+            border: 1px solid var(--border-light);
+        }
+
+        .blueprint-box {
+            background-color: #FAFBFC;
+            background-size: 20px 20px;
+            background-image:
+                linear-gradient(to right, rgba(226, 231, 236, 0.7) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(226, 231, 236, 0.7) 1px, transparent 1px);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
+            padding: 10px;
+        }
+
+        footer {
+            border-top: 1px solid var(--border-light);
+            margin-top: 30px;
+            padding-top: 20px;
+        }
+
+        /* TOAST NOTIFICACIÓN */
+        #toast-msg {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 999;
+            background: var(--primary);
+            color: #FFFFFF;
+            padding: 10px 18px;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+            font-size: 0.85em;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(26, 37, 48, 0.2);
+            display: none;
+        }
+
+        @media print {
+            .no-print { display: none !important; }
+            body { background: #FFFFFF !important; }
+            .panel-card { box-shadow: none !important; border: 1px solid #CCC !important; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="contenedor-principal">
+
+    <!-- HEADER TÉCNICO INSTITUCIONAL -->
+    <div class="header-ce">
+        <img src="../assets/IsotipoFOscuroT.png" alt="Criterio Estructural" class="brand-logo-header" onerror="this.style.display='none'">
+        <h1>Diseño de Muros de Contención en Voladizo</h1>
+        <p>Estabilidad Geotécnica · Flexocompresión y Cortante · Verificación Normativa NSR-10 / CCP-14 (b = 1.00 m)</p>
+    </div>
+
+    <div class="w3-row-padding" style="margin: 0 -8px;">
+
+        <!-- =================================================================== -->
+        <!-- COLUMNA IZQUIERDA: PARÁMETROS DE ENTRADA Y RESUMEN DE ESTADO        -->
+        <!-- =================================================================== -->
+        <div class="w3-col l4 m12 no-print">
+
+            <!-- 01. GEOMETRÍA Y EMPUJES LATERALES -->
+            <div class="panel-card">
+                <div class="titulo-seccion">
+                    <span><i class="fa fa-arrows-v"></i> Geometría y Empujes Laterales</span>
+                    <button type="button" class="btn-ce" onclick="restaurarValoresDefault()">
+                        <i class="fa fa-refresh"></i> Reset
+                    </button>
+                </div>
+
+                <div class="w3-row-padding" style="margin: 0 -8px;">
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-hmuro">Altura Vástago H (m)</label>
+                        <input id="in-hmuro" type="number" step="0.10" min="1.0" max="15.0" value="4.00" class="w3-input">
+                    </div>
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-ql">Sobrecarga q<sub>L</sub> (kPa)</label>
+                        <input id="in-ql" type="number" step="1.0" min="0" max="200" value="10.0" class="w3-input">
+                    </div>
+                </div>
+
+                <!-- EMPUJE ESTÁTICO Pa1 -->
+                <div style="border-top: 1px solid var(--border-light); padding-top: 12px; margin-top: 4px;">
+                    <label class="lbl-ce" for="in-h1-mode">Empuje Estático (P<sub>a1</sub> sobre altura H)</label>
+                    <select id="in-h1-mode" class="w3-select w3-margin-bottom">
+                        <option value="ka">Modo 1: Coeficiente K<sub>a</sub> (Rankine / Manual)</option>
+                        <option value="manual">Modo 2: Presiones manuales en corona y base</option>
+                    </select>
+
+                    <!-- Subpanel Modo Ka -->
+                    <div id="panel-h1-ka" class="caja-metrica">
+                        <label style="display:flex; align-items:center; gap:6px; font-size:0.82em; color:var(--primary); font-weight:600; cursor:pointer; margin-bottom:8px;">
+                            <input id="in-ka-auto" type="checkbox" checked>
+                            <span>K<sub>a</sub> automático Rankine = tan²(45° − φ/2)</span>
+                        </label>
+                        <div class="w3-row-padding" style="margin: 0 -6px;">
+                            <div class="w3-col s4">
+                                <label class="lbl-ce" for="in-ka">Valor K<sub>a</sub></label>
+                                <input id="in-ka" type="number" step="0.005" min="0.05" max="1.50" value="0.333" disabled class="w3-input">
+                            </div>
+                            <div class="w3-col s4">
+                                <label class="lbl-ce">p<sub>0</sub> (z=0)</label>
+                                <div id="disp-ptop" class="mono" style="padding:7px 8px; background:#FFF; border:1px solid var(--border-light); border-radius:4px; font-size:0.82em;">3.33 kPa</div>
+                            </div>
+                            <div class="w3-col s4">
+                                <label class="lbl-ce">p<sub>H</sub> (z=H)</label>
+                                <div id="disp-pbot" class="mono" style="padding:7px 8px; background:#FFF; border:1px solid var(--border-light); border-radius:4px; font-size:0.82em;">27.33 kPa</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subpanel Modo Manual -->
+                    <div id="panel-h1-manual" class="caja-metrica" style="display:none;">
+                        <div class="w3-row-padding" style="margin: 0 -6px;">
+                            <div class="w3-col s6">
+                                <label class="lbl-ce" for="in-ptop-man">p<sub>0</sub> corona (kPa)</label>
+                                <input id="in-ptop-man" type="number" step="0.5" min="0" max="500" value="4.0" class="w3-input">
+                            </div>
+                            <div class="w3-col s6">
+                                <label class="lbl-ce" for="in-pbot-man">p<sub>H</sub> base H (kPa)</label>
+                                <input id="in-pbot-man" type="number" step="0.5" min="0" max="500" value="28.0" class="w3-input">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- EMPUJE SÍSMICO Pa2 -->
+                <div style="border-top: 1px solid var(--border-light); padding-top: 12px; margin-top: 8px;">
+                    <label class="lbl-ce" for="in-h2-mode">Incremento Sísmico (P<sub>a2</sub>)</label>
+                    <select id="in-h2-mode" class="w3-select w3-margin-bottom">
+                        <option value="manual">Presiones sísmicas manuales (corona y base)</option>
+                        <option value="mo">Cálculo automático Mononobe–Okabe (k<sub>h</sub>, k<sub>v</sub>)</option>
+                    </select>
+
+                    <div id="panel-h2-manual" class="caja-metrica">
+                        <div class="w3-row-padding" style="margin: 0 -6px;">
+                            <div class="w3-col s6">
+                                <label class="lbl-ce" for="in-pstop">p<sub>s,0</sub> corona (kPa)</label>
+                                <input id="in-pstop" type="number" step="0.5" min="0" max="300" value="12.0" class="w3-input">
+                            </div>
+                            <div class="w3-col s6">
+                                <label class="lbl-ce" for="in-psbot">p<sub>s,H</sub> base H (kPa)</label>
+                                <input id="in-psbot" type="number" step="0.5" min="0" max="300" value="4.0" class="w3-input">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="panel-h2-mo" class="caja-metrica" style="display:none;">
+                        <div class="w3-row-padding" style="margin: 0 -6px;">
+                            <div class="w3-col s4">
+                                <label class="lbl-ce" for="in-kh">Coef. k<sub>h</sub></label>
+                                <input id="in-kh" type="number" step="0.01" min="0" max="0.60" value="0.15" class="w3-input">
+                            </div>
+                            <div class="w3-col s4">
+                                <label class="lbl-ce" for="in-kv">Coef. k<sub>v</sub></label>
+                                <input id="in-kv" type="number" step="0.01" min="-0.30" max="0.30" value="0.00" class="w3-input">
+                            </div>
+                            <div class="w3-col s4">
+                                <label class="lbl-ce">ΔK<sub>ae</sub></label>
+                                <div id="disp-dkae" class="mono" style="padding:7px 8px; background:#FFF; border:1px solid var(--border-light); border-radius:4px; font-size:0.82em;">0.104</div>
+                            </div>
+                        </div>
+                        <div id="disp-mo-press" class="nota-tecnica" style="margin-top:6px;">
+                            Distribución Seed–Whitman (0.60H): p<sub>s,0</sub> = 0.0 kPa | p<sub>s,H</sub> = 0.0 kPa
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 02. SUELO, MATERIALES Y CRITERIOS GEOTÉCNICOS -->
+            <div class="panel-card">
+                <div class="titulo-seccion">
+                    <span><i class="fa fa-sliders"></i> Suelo, Materiales y Criterios</span>
+                </div>
+
+                <div class="w3-row-padding" style="margin: 0 -6px;">
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-gammas">Peso Suelo γ<sub>s</sub> (kN/m³)</label>
+                        <input id="in-gammas" type="number" step="0.5" min="10" max="25" value="18.0" class="w3-input">
+                    </div>
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-gammac">Peso Concreto γ<sub>c</sub> (kN/m³)</label>
+                        <input id="in-gammac" type="number" step="0.5" min="20" max="28" value="24.0" class="w3-input">
+                    </div>
+                </div>
+
+                <div class="w3-row-padding" style="margin: 0 -6px;">
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-phi">Fricción Suelo φ (°)</label>
+                        <input id="in-phi" type="number" step="0.5" min="15" max="45" value="30.0" class="w3-input">
+                    </div>
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-delta">Fricción Base δ (°)</label>
+                        <input id="in-delta" type="number" step="0.5" min="10" max="40" value="25.0" class="w3-input">
+                    </div>
+                </div>
+
+                <div class="nota-tecnica w3-margin-bottom" style="margin-top:0;">
+                    <b>Ref. δ:</b> Tabla C3.11.5.3-1 Código Colombiano de Puentes CCP-14 / AASHTO LRFD (concreto vaciado in situ sobre suelo).
+                </div>
+
+                <div class="w3-row-padding" style="margin: 0 -6px;">
+                    <div class="w3-col s12 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-qadm">Capacidad Portante Admisible q<sub>adm</sub> (kPa)</label>
+                        <input id="in-qadm" type="number" step="5" min="30" max="1500" value="180.0" class="w3-input">
+                    </div>
+                </div>
+
+                <div class="w3-row-padding" style="margin: 0 -6px; border-top: 1px solid var(--border-light); padding-top: 12px;">
+                    <div class="w3-col s4 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-fc">f'<sub>c</sub> (MPa)</label>
+                        <input id="in-fc" type="number" step="1" min="28" max="70" value="28.0" class="w3-input">
+                    </div>
+                    <div class="w3-col s4 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-fy">f<sub>y</sub> (MPa)</label>
+                        <input id="in-fy" type="number" step="10" min="240" max="550" value="420.0" class="w3-input">
+                    </div>
+                    <div class="w3-col s4 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-recub">Recub. r (mm)</label>
+                        <input id="in-recub" type="number" step="5" min="40" max="120" value="75" class="w3-input">
+                    </div>
+                </div>
+
+                <div class="w3-row-padding" style="margin: 0 -6px; border-top: 1px solid var(--border-light); padding-top: 12px;">
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-fsvolc">FS<sub>mín</sub> Volcamiento</label>
+                        <input id="in-fsvolc" type="number" step="0.1" min="1.5" max="6.0" value="3.0" class="w3-input">
+                    </div>
+                    <div class="w3-col s6 w3-margin-bottom">
+                        <label class="lbl-ce" for="in-fsdesl">FS<sub>mín</sub> Deslizamiento</label>
+                        <input id="in-fsdesl" type="number" step="0.1" min="1.1" max="4.0" value="1.6" class="w3-input">
+                    </div>
+                </div>
+
+                <div class="w3-margin-bottom">
+                    <label class="lbl-ce" for="in-toe-ratio">Incremento Puntera en Iteración (ΔL<sub>h</sub> = 0.10 m)</label>
+                    <select id="in-toe-ratio" class="w3-select">
+                        <option value="0.50" selected>50% del incremento del talón (ΔL<sub>t</sub> = 0.05 m)</option>
+                        <option value="0.60">60% del incremento del talón (ΔL<sub>t</sub> = 0.06 m)</option>
+                    </select>
+                </div>
+
+                <div class="caja-metrica" style="margin-bottom:0;">
+                    <label style="display:flex; align-items:flex-start; gap:8px; font-size:0.84em; color:var(--primary); font-weight:600; cursor:pointer;">
+                        <input id="in-use-key" type="checkbox" checked style="margin-top:3px;">
+                        <span>Incluir dentellón / cuña bajo vástago si falla deslizamiento</span>
+                    </label>
+                    <div class="w3-row-padding" style="margin: 8px -6px 0 -6px;">
+                        <div class="w3-col s6">
+                            <label class="lbl-ce" for="in-passive-factor">Factor Pasivo η<sub>p</sub></label>
+                            <input id="in-passive-factor" type="number" step="0.1" min="0.0" max="1.0" value="1.0" class="w3-input">
+                        </div>
+                        <div class="w3-col s6">
+                            <span class="valor-sutil" style="display:block; margin-top:16px;">Itera d<sub>k</sub> de a 0.10 m</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 03. RESUMEN DE ESTADO GLOBAL -->
+            <div class="panel-card">
+                <div class="titulo-seccion">
+                    <span><i class="fa fa-check-square-o"></i> Resumen de Verificaciones</span>
+                </div>
+                <div id="resumen-lateral-cards"></div>
+            </div>
+
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- COLUMNA DERECHA: ESQUEMA, RESULTADOS GEOTÉCNICOS Y DISEÑO NSR-10    -->
+        <!-- =================================================================== -->
+        <div class="w3-col l8 m12">
+
+            <!-- BARRA DE PESTAÑAS -->
+            <div class="tabs-bar no-print" role="tablist">
+                <button type="button" data-tab="tab-geo" class="tab-btn active">
+                    1. Geometría y Estabilidad
+                </button>
+                <button type="button" data-tab="tab-stem" class="tab-btn">
+                    2. Vástago y Diagrama φM<sub>n</sub>
+                </button>
+                <button type="button" data-tab="tab-footing" class="tab-btn">
+                    3. Talón y Puntera
+                </button>
+                <button type="button" data-tab="tab-report" class="tab-btn">
+                    4. Memoria y Alcance
+                </button>
+            </div>
+
+            <!-- =============================================================== -->
+            <!-- PESTAÑA 1: GEOMETRÍA A ESCALA Y ESTABILIDAD GEOTÉCNICA          -->
+            <!-- =============================================================== -->
+            <div id="tab-geo" class="tab-panel">
+
+                <!-- ESQUEMA GEOMÉTRICO SVG A ESCALA -->
+                <div class="panel-card">
+                    <div class="titulo-seccion">
+                        <span><i class="fa fa-object-group"></i> Esquema Geométrico a Escala y Presiones Basales</span>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span class="valor-sutil">Diagrama basal:</span>
+                            <select id="svg-pressure-combo" class="w3-select" style="width:auto; padding:4px 8px !important; font-size:0.82em !important;">
+                                <option value="DH">D + Pa1 (Servicio sin sobrecarga)</option>
+                                <option value="DHL">D + Pa1 + qL (Servicio con sobrecarga)</option>
+                                <option value="DHS">D + Pa1 + Pa2 (Servicio con sismo)</option>
+                                <option value="09DH1">0.9D + 1.6Pa1 (Último Mín.)</option>
+                                <option value="12DH1L">1.2D + 1.6Pa1 + 1.6qL</option>
+                                <option value="12DH2L">1.2D + 1.6Pa2 + 1.6qL (Sísmico)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="blueprint-box" style="overflow-x:auto; text-align:center;">
+                        <svg id="wall-svg" viewBox="0 0 920 530" style="width:100%; max-width:920px; height:auto; display:inline-block;"></svg>
+                    </div>
+                </div>
+
+                <!-- PREDIMENSIONAMIENTO E ITERACIÓN DE VOLCAMIENTO -->
+                <div class="w3-row-padding" style="margin: 0 -8px;">
+                    <div class="w3-col l6 m12">
+                        <div class="panel-card">
+                            <div class="titulo-seccion">
+                                <span><i class="fa fa-cube"></i> Predimensionamiento y Volcamiento</span>
+                                <span id="badge-volc"></span>
+                            </div>
+
+                            <div id="predim-summary" class="w3-row-padding" style="margin: 0 -4px 12px -4px;"></div>
+
+                            <div style="font-size:0.8em; font-weight:600; color:var(--secondary); margin-bottom:6px;">
+                                Trazabilidad Iteración (D + P<sub>a1</sub>): FS<sub>volc</sub> ≥ FS<sub>mín</sub> y Compresión Total (q<sub>mín</sub> ≥ 0)
+                            </div>
+                            <div style="max-height: 240px; overflow-y: auto;">
+                                <table class="tabla-ce mono">
+                                    <thead>
+                                        <tr>
+                                            <th>Iter</th>
+                                            <th>L<sub>t</sub> (m)</th>
+                                            <th>L<sub>h</sub> (m)</th>
+                                            <th>B (m)</th>
+                                            <th>FS<sub>volc</sub></th>
+                                            <th>q<sub>mín</sub> (kPa)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-volc-iter"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DESLIZAMIENTO (DENTELLÓN) Y CAPACIDAD PORTANTE -->
+                    <div class="w3-col l6 m12">
+                        <div class="panel-card">
+                            <div class="titulo-seccion">
+                                <span><i class="fa fa-exchange"></i> Deslizamiento y Capacidad Portante</span>
+                                <span id="badge-desl"></span>
+                            </div>
+
+                            <div id="sliding-details" style="margin-bottom: 14px;"></div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; border-top:1px solid var(--border-light); padding-top:12px;">
+                                <span style="font-size:0.8em; font-weight:600; color:var(--secondary);">Presiones Basales de Servicio (q<sub>máx</sub> ≤ q<sub>adm</sub> y q<sub>mín</sub> ≥ 0):</span>
+                                <span id="badge-bearing"></span>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="tabla-ce mono">
+                                    <thead>
+                                        <tr>
+                                            <th>Combinación</th>
+                                            <th>e (m)</th>
+                                            <th>q<sub>punt</sub></th>
+                                            <th>q<sub>talón</sub></th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-bearing"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- =============================================================== -->
+            <!-- PESTAÑA 2: DISEÑO DEL VÁSTAGO Y DIAGRAMA INTERACTIVO φMn        -->
+            <!-- =============================================================== -->
+            <div id="tab-stem" class="tab-panel" style="display:none;">
+                <div class="w3-row-padding" style="margin: 0 -8px;">
+
+                    <!-- Chequeos Cortante/Flexión + Tabla de Barras -->
+                    <div class="w3-col l5 m12">
+                        <div class="panel-card">
+                            <div class="titulo-seccion">
+                                <span><i class="fa fa-shield"></i> Verificación Vástago (Cara Interna)</span>
+                            </div>
+
+                            <div id="stem-checks" style="margin-bottom: 14px;"></div>
+
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                                <span style="font-size:0.8em; font-weight:600; color:var(--secondary);">Propuestas Refuerzo Principal (s ↓ 0.01 m):</span>
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="tabla-ce mono">
+                                    <thead>
+                                        <tr>
+                                            <th>Barra</th>
+                                            <th>s<sub>req</sub> (m)</th>
+                                            <th>Propuesta</th>
+                                            <th>A<sub>s,prov</sub></th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-stem-bars"></tbody>
+                                </table>
+                            </div>
+                            <div id="stem-rebar-notes" class="nota-tecnica"></div>
+                        </div>
+                    </div>
+
+                    <!-- Gráfico Interactivo Mu(y) vs φMn(y) -->
+                    <div class="w3-col l7 m12">
+                        <div class="panel-card">
+                            <div class="titulo-seccion">
+                                <span><i class="fa fa-line-chart"></i> Diagrama de Momentos M<sub>u</sub>(y) vs. φM<sub>n</sub>(y)</span>
+                            </div>
+
+                            <!-- Controles Interactivos de Despiece -->
+                            <div class="caja-metrica">
+                                <div class="w3-row-padding" style="margin: 0 -6px;">
+                                    <div class="w3-col s3">
+                                        <label class="lbl-ce" for="sel-stem-bar">Calibre Base</label>
+                                        <select id="sel-stem-bar" class="w3-select">
+                                            <option value="3">N°3 (3/8")</option>
+                                            <option value="4">N°4 (1/2")</option>
+                                            <option value="5" selected>N°5 (5/8")</option>
+                                            <option value="6">N°6 (3/4")</option>
+                                            <option value="7">N°7 (7/8")</option>
+                                            <option value="8">N°8 (1")</option>
+                                        </select>
+                                    </div>
+                                    <div class="w3-col s3">
+                                        <label class="lbl-ce" for="in-stem-spacing">Sep. Base (mm)</label>
+                                        <input id="in-stem-spacing" type="number" step="10" min="50" max="450" value="200" class="w3-input">
+                                    </div>
+                                    <div class="w3-col s3">
+                                        <label class="lbl-ce">Corte 50% Barras</label>
+                                        <label style="display:flex; align-items:center; gap:6px; font-size:0.82em; color:var(--primary); font-weight:600; margin-top:7px; cursor:pointer;">
+                                            <input id="in-stem-cutoff-enable" type="checkbox">
+                                            <span>Cortar alternas</span>
+                                        </label>
+                                    </div>
+                                    <div class="w3-col s3">
+                                        <label class="lbl-ce" for="in-stem-cutoff-h">Altura corte (m)</label>
+                                        <input id="in-stem-cutoff-h" type="number" step="0.10" min="0.30" max="15.0" value="2.00" disabled class="w3-input">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="stem-capacity-banner" class="caja-metrica" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;"></div>
+
+                            <div class="blueprint-box" style="text-align:center;">
+                                <svg id="stem-moment-svg" viewBox="0 0 640 430" style="width:100%; max-width:640px; height:auto; display:inline-block;"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- =============================================================== -->
+            <!-- PESTAÑA 3: DISEÑO DE LOSA DEL TALÓN Y LOSA DE LA PUNTERA        -->
+            <!-- =============================================================== -->
+            <div id="tab-footing" class="tab-panel" style="display:none;">
+                <div class="w3-row-padding" style="margin: 0 -8px;">
+
+                    <!-- DISEÑO LOSA DEL TALÓN (ACERO SUPERIOR) -->
+                    <div class="w3-col l6 m12">
+                        <div class="panel-card">
+                            <div class="titulo-seccion">
+                                <span><i class="fa fa-arrow-up"></i> Losa del Talón — Refuerzo Superior</span>
+                                <span id="badge-heel"></span>
+                            </div>
+
+                            <div id="heel-details" style="margin-bottom: 12px;"></div>
+
+                            <div style="font-size:0.8em; font-weight:600; color:var(--secondary); margin-bottom:6px;">
+                                Propuestas Acero Superior en Talón (Cara Trasera Vástago):
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="tabla-ce mono">
+                                    <thead>
+                                        <tr>
+                                            <th>Barra</th>
+                                            <th>s<sub>req</sub> (m)</th>
+                                            <th>Propuesta</th>
+                                            <th>A<sub>s,prov</sub></th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-heel-bars"></tbody>
+                                </table>
+                            </div>
+                            <div class="nota-tecnica">
+                                <b>Criterio Conservador:</b> Se evalúa el voladizo del talón bajo cargas descendentes mayoradas <span class="mono">1.2D + 1.6q<sub>L</sub></span> (con relleno de altura H), despreciando favorablemente la reacción ascendente del suelo.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- DISEÑO LOSA DE LA PUNTERA (ACERO INFERIOR) -->
+                    <div class="w3-col l6 m12">
+                        <div class="panel-card">
+                            <div class="titulo-seccion">
+                                <span><i class="fa fa-arrow-down"></i> Losa de la Puntera — Refuerzo Inferior</span>
+                                <span id="badge-toe"></span>
+                            </div>
+
+                            <div style="overflow-x:auto; margin-bottom:12px;">
+                                <table class="tabla-ce mono">
+                                    <thead>
+                                        <tr>
+                                            <th>Combinación</th>
+                                            <th>q<sub>u,punt</sub></th>
+                                            <th>V<sub>u</sub> (kN)</th>
+                                            <th>M<sub>u</sub> (kN·m)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-toe-combos"></tbody>
+                                </table>
+                            </div>
+
+                            <div id="toe-details" style="margin-bottom: 12px;"></div>
+
+                            <div style="font-size:0.8em; font-weight:600; color:var(--secondary); margin-bottom:6px;">
+                                Propuestas Acero Inferior en Puntera (Cara Delantera Vástago):
+                            </div>
+                            <div style="overflow-x:auto;">
+                                <table class="tabla-ce mono">
+                                    <thead>
+                                        <tr>
+                                            <th>Barra</th>
+                                            <th>s<sub>req</sub> (m)</th>
+                                            <th>Propuesta</th>
+                                            <th>A<sub>s,prov</sub></th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody-toe-bars"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- =============================================================== -->
+            <!-- PESTAÑA 4: MEMORIA DE CÁLCULO RESUMEN Y ALCANCE                 -->
+            <!-- =============================================================== -->
+            <div id="tab-report" class="tab-panel" style="display:none;">
+                <div class="panel-card">
+                    <div class="titulo-seccion">
+                        <span><i class="fa fa-file-text-o"></i> Memoria Ejecutiva de Diseño — Criterio Estructural</span>
+                        <div class="no-print" style="display:flex; gap:8px;">
+                            <button id="btn-copy-report" type="button" class="btn-magico">
+                                <i class="fa fa-copy"></i> Copiar Resumen
+                            </button>
+                            <button onclick="window.print()" type="button" class="btn-ce">
+                                <i class="fa fa-print"></i> Imprimir / PDF
+                            </button>
+                        </div>
+                    </div>
+
+                    <div id="report-content"></div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- AVISO ACADÉMICO / TÉCNICO FINAL -->
+    <div class="aviso-informativo">
+        <b style="font-weight: 600; color: var(--primary);">🚧 Herramienta de Verificación Técnica:</b> Esta aplicación resuelve el equilibrio geotécnico y estructural por metro lineal de muros de contención en voladizo bajo condiciones de suelo drenado (nivel freático abatido), relleno horizontal y cohesión nula (c = 0). No incluye verificación de estabilidad global de talud ni cálculo de asentamientos. Todo diseño requiere validación e inspección de anclajes y memoria por parte del ingeniero diseñador responsable.
+    </div>
+
+    <!-- FOOTER INSTITUCIONAL -->
+    <footer class="w3-container w3-center">
+        <img src="../assets/IsotipoFClaroT.png" alt="Criterio Estructural" class="brand-logo-footer" onerror="this.style.display='none'">
+        <p class="w3-large"><b>Rafael Antonio Correa Melano</b></p>
+        <p class="w3-tiny" style="margin: 4px 0 0 0; color: var(--secondary);">Ingeniero Civil • M.IE. | Universidad Industrial de Santander</p>
+        <p class="w3-tiny" style="margin-top: 10px; color: var(--text-muted);"><b>Criterio Estructural</b> © 2026. Todos los derechos reservados. Bucaramanga, Colombia</p>
+    </footer>
+
+</div>
+
+<div id="toast-msg">Resumen copiado al portapapeles</div>
+
+<script>
+// ===========================================================================
+// CATÁLOGO OFICIAL DE BARRAS CORRUGADAS (ASTM A615 / NTC 2289)
+// ===========================================================================
+const REBAR_CATALOG = [
+    { num: 3, diamMm: 9.53,  areaMm2: 71.26,  label: 'N°3 (3/8")' },
+    { num: 4, diamMm: 12.70, areaMm2: 126.68, label: 'N°4 (1/2")' },
+    { num: 5, diamMm: 15.88, areaMm2: 197.93, label: 'N°5 (5/8")' },
+    { num: 6, diamMm: 19.05, areaMm2: 285.02, label: 'N°6 (3/4")' },
+    { num: 7, diamMm: 22.23, areaMm2: 387.95, label: 'N°7 (7/8")' },
+    { num: 8, diamMm: 25.40, areaMm2: 506.71, label: 'N°8 (1")'   }
+];
+
+const CLAVE_STORAGE = 'criterio_muro_voladizo_v1';
+let lastResults = null;
+
+// Helpers matemáticos
+const degToRad = (deg) => (deg * Math.PI) / 180.0;
+const fmt = (val, dec = 2) => Number.isFinite(val) ? val.toFixed(dec) : '—';
+const ceilToStep = (val, step) => Math.ceil((val - 1e-9) / step) * step;
+
+/**
+ * Integración exacta de trapecio de presiones desde z = 0 (presión pTop) hasta z = L (presión pBot).
+ * Retorna fuerza total Pa (kN/m), centroide yCg medido desde la base del tramo (z = L) hacia arriba (m),
+ * y momento flector en la base del tramo M (kN·m/m).
+ */
+function integrateTrapezoid(pTop, pBot, L) {
+    if (L <= 0) return { F: 0, yCg: 0, zCg: 0, M: 0 };
+    const F = 0.5 * (pTop + pBot) * L;
+    let yCg = L / 2.0;
+    if (pTop + pBot > 1e-9) {
+        yCg = (L / 3.0) * ((2.0 * pTop + pBot) / (pTop + pBot));
+    }
+    const zCg = L - yCg;
+    const M = F * yCg;
+    return { F, yCg, zCg, M };
+}
+
+/**
+ * Evalúa presiones bajo la zapata de ancho B (x=0 en arista delantera puntera, x=B en talón)
+ * para resultante vertical N (kN/m), momento estabilizador Me respecto a x=0 y volcador Mv.
+ * Maneja automáticamente núcleo central (|e| <= B/6) y despegue parcial (e > B/6) sin tracciones ficticias.
+ */
+function evaluateBasePressure(N, Me, Mv, B) {
+    const Mnet = Me - Mv;
+    const xRes = N > 1e-6 ? Mnet / N : B / 2.0;
+    const e = B / 2.0 - xRes;
+    let qToe = 0;
+    let qHeel = 0;
+    let contactLength = B;
+    let uplifted = false;
+
+    if (xRes <= 0) {
+        uplifted = true;
+        contactLength = 0.01;
+        qToe = (2.0 * N) / contactLength;
+        qHeel = 0;
+    } else if (e > B / 6.0 + 1e-9) {
+        uplifted = true;
+        contactLength = Math.min(B, 3.0 * xRes);
+        qToe = (2.0 * N) / contactLength;
+        qHeel = 0;
+    } else if (e < -B / 6.0 - 1e-9) {
+        uplifted = true;
+        const xFromHeel = B - xRes;
+        contactLength = Math.min(B, 3.0 * xFromHeel);
+        qHeel = (2.0 * N) / contactLength;
+        qToe = 0;
+    } else {
+        qToe = (N / B) * (1.0 + (6.0 * e) / B);
+        qHeel = (N / B) * (1.0 - (6.0 * e) / B);
+    }
+
+    const qAt = (x) => {
+        if (!uplifted) {
+            return qToe + ((qHeel - qToe) * x) / B;
+        }
+        if (e > B / 6.0) {
+            if (x >= contactLength) return 0;
+            return qToe * (1.0 - x / contactLength);
+        }
+        const xStart = B - contactLength;
+        if (x <= xStart) return 0;
+        return qHeel * ((x - xStart) / contactLength);
+    };
+
+    const integrateForce = (x1, x2) => {
+        const a = Math.max(0, x1);
+        const b = Math.min(B, x2);
+        if (b <= a) return 0;
+        if (!uplifted || e <= B / 6.0) {
+            return 0.5 * (qAt(a) + qAt(b)) * (b - a);
+        }
+        if (a >= contactLength) return 0;
+        if (b <= contactLength) {
+            return 0.5 * (qAt(a) + qAt(b)) * (b - a);
+        }
+        return 0.5 * qAt(a) * (contactLength - a);
+    };
+
+    const integrateToeUpward = (xCut) => {
+        const b = Math.min(B, xCut);
+        if (b <= 0) return { V: 0, M: 0 };
+        if (!uplifted || e <= B / 6.0 || b <= contactLength) {
+            const q1 = qAt(0);
+            const q2 = qAt(b);
+            const V = 0.5 * (q1 + q2) * b;
+            const distFromCut = (q1 + q2) > 1e-9 ? (b / 3.0) * ((2.0 * q1 + q2) / (q1 + q2)) : b / 2.0;
+            return { V, M: V * distFromCut };
+        }
+        const V = 0.5 * qToe * contactLength;
+        const xCentroid = contactLength / 3.0;
+        const distFromCut = b - xCentroid;
+        return { V, M: V * distFromCut };
+    };
+
+    return {
+        N, Me, Mv, Mnet, xRes, e,
+        qToe, qHeel,
+        qMax: Math.max(qToe, qHeel),
+        qMin: Math.min(qToe, qHeel),
+        contactLength, uplifted,
+        qAt, integrateForce, integrateToeUpward
+    };
+}
+
+/**
+ * Calcula capacidad a flexión con verificación exacta de compatibilidad de deformaciones (NSR-10 C.9.3.2)
+ */
+function computeSectionCapacity(As_mm2, d_mm, fc_MPa, fy_MPa) {
+    const b_mm = 1000.0;
+    const Es = 200000.0;
+    const ecu = 0.003;
+    const ey = fy_MPa / Es;
+    const beta1 = Math.max(0.65, Math.min(0.85, 0.85 - 0.05 * (fc_MPa - 28.0) / 7.0));
+
+    const a = (As_mm2 * fy_MPa) / (0.85 * fc_MPa * b_mm);
+    const c = a / beta1;
+    const et = c > 1e-6 ? ecu * ((d_mm - c) / c) : 0.05;
+
+    let phi = 0.65;
+    if (et >= 0.005) phi = 0.90;
+    else if (et > ey) phi = 0.65 + 0.25 * ((et - ey) / (0.005 - ey));
+
+    const Mn_kNm = (As_mm2 * fy_MPa * (d_mm - a / 2.0)) / 1e6;
+    const phiMn = phi * Mn_kNm;
+    return { a, c, et, phi, Mn_kNm, phiMn, tensionControlled: et >= 0.005 };
+}
+
+/**
+ * Diseño estructural a flexión (NSR-10) y tabla de barras N°3 a N°8 (separación redondeada hacia abajo a 0.01 m)
+ */
+function designFlexureSection(Mu_kNm, d_mm, thickness_mm, fc_MPa, fy_MPa) {
+    const b_mm = 1000.0;
+    const phiAssumed = 0.90;
+    const Mu_Nmm = Math.abs(Mu_kNm) * 1e6;
+    const Rn = Mu_Nmm / (phiAssumed * b_mm * d_mm * d_mm);
+    const term = 1.0 - (2.0 * Rn) / (0.85 * fc_MPa);
+
+    let rhoReq = 0;
+    let sectionAdequate = true;
+    if (term <= 0.05) {
+        sectionAdequate = false;
+        rhoReq = (0.85 * fc_MPa) / fy_MPa;
+    } else {
+        rhoReq = ((0.85 * fc_MPa) / fy_MPa) * (1.0 - Math.sqrt(term));
+    }
+
+    const AsReq = rhoReq * b_mm * d_mm;
+    const AsMin = 0.00333 * b_mm * d_mm;
+    const AsDesign = Math.max(AsReq, AsMin);
+    const sMaxMm = Math.min(3.0 * thickness_mm, 450.0);
+
+    const proposals = REBAR_CATALOG.map((bar) => {
+        const sExact = bar.areaMm2 / AsDesign; // m
+        const sRounded = Math.floor((sExact + 1e-9) * 100.0) / 100.0; // redondeo hacia abajo a 0.01 m
+        const sMm = sRounded * 1000.0;
+        const AsProvided = sRounded >= 0.05 ? bar.areaMm2 / sRounded : 0;
+        const cap = AsProvided > 0 ? computeSectionCapacity(AsProvided, d_mm, fc_MPa, fy_MPa) : { phi: 0, et: 0, phiMn: 0, tensionControlled: false };
+
+        let statusText = 'CUMPLE';
+        let ok = true;
+        if (sRounded < 0.075) {
+            ok = false;
+            statusText = 's < 7.5 cm';
+        } else if (sMm > sMaxMm + 1e-6) {
+            ok = false;
+            statusText = `s > ${(sMaxMm / 1000).toFixed(2)}m`;
+        } else if (!cap.tensionControlled) {
+            ok = false;
+            statusText = 'εt < 0.005';
+        } else if (cap.phiMn < Math.abs(Mu_kNm) - 1e-4) {
+            ok = false;
+            statusText = 'φMn < Mu';
+        }
+
+        return {
+            ...bar,
+            sExact,
+            sRounded,
+            AsProvided,
+            cap,
+            ok,
+            statusText
+        };
+    });
+
+    return {
+        Mu: Mu_kNm,
+        d_mm,
+        sMaxMm,
+        Rn,
+        rhoReq,
+        AsReq,
+        AsMin,
+        AsDesign,
+        sectionAdequate,
+        proposals
+    };
+}
+
+// ===========================================================================
+// MOTOR PRINCIPAL DE CÁLCULO GEOTÉCNICO Y ESTRUCTURAL
+// ===========================================================================
+function runEngineeringDesign() {
+    // 1. Lectura de parámetros de entrada
+    const H = Math.max(1.0, parseFloat(document.getElementById('in-hmuro').value) || 4.0);
+    const qL = Math.max(0, parseFloat(document.getElementById('in-ql').value) || 0);
+    const h1Mode = document.getElementById('in-h1-mode').value;
+    const kaAuto = document.getElementById('in-ka-auto').checked;
+    const h2Mode = document.getElementById('in-h2-mode').value;
+
+    const gammaS = Math.max(10, parseFloat(document.getElementById('in-gammas').value) || 18.0);
+    const gammaC = Math.max(20, parseFloat(document.getElementById('in-gammac').value) || 24.0);
+    const phiDeg = Math.max(10, Math.min(48, parseFloat(document.getElementById('in-phi').value) || 30.0));
+    const deltaDeg = Math.max(5, Math.min(45, parseFloat(document.getElementById('in-delta').value) || 25.0));
+    const qAdm = Math.max(20, parseFloat(document.getElementById('in-qadm').value) || 180.0);
+    const fc = Math.max(28, parseFloat(document.getElementById('in-fc').value) || 28.0);
+    const fy = Math.max(240, parseFloat(document.getElementById('in-fy').value) || 420.0);
+    const recubMm = Math.max(40, parseFloat(document.getElementById('in-recub').value) || 75);
+
+    const fsVolcMin = Math.max(1.2, parseFloat(document.getElementById('in-fsvolc').value) || 3.0);
+    const fsDeslMin = Math.max(1.1, parseFloat(document.getElementById('in-fsdesl').value) || 1.6);
+    const toeRatio = parseFloat(document.getElementById('in-toe-ratio').value) || 0.50;
+    const useKey = document.getElementById('in-use-key').checked;
+    const passiveFactor = Math.max(0, Math.min(1.0, parseFloat(document.getElementById('in-passive-factor').value) ?? 1.0));
+
+    // Visibilidad de subpaneles
+    document.getElementById('panel-h1-ka').style.display = (h1Mode === 'ka') ? 'block' : 'none';
+    document.getElementById('panel-h1-manual').style.display = (h1Mode === 'manual') ? 'block' : 'none';
+    document.getElementById('panel-h2-manual').style.display = (h2Mode === 'manual') ? 'block' : 'none';
+    document.getElementById('panel-h2-mo').style.display = (h2Mode === 'mo') ? 'block' : 'none';
+
+    // Coeficiente activo Ka
+    const kaRankine = Math.pow(Math.tan(degToRad(45.0 - phiDeg / 2.0)), 2);
+    const kaInput = document.getElementById('in-ka');
+    kaInput.disabled = kaAuto;
+    if (kaAuto) {
+        kaInput.value = kaRankine.toFixed(3);
+    }
+    const Ka = Math.max(0.05, parseFloat(kaInput.value) || kaRankine);
+
+    // 2. Presiones laterales estáticas Pa1 sobre la altura del vástago H
+    let pTopPa1 = 0;
+    let pBotPa1 = 0;
+    if (h1Mode === 'ka') {
+        pTopPa1 = Ka * qL;
+        pBotPa1 = Ka * (qL + gammaS * H);
+        document.getElementById('disp-ptop').innerText = `${fmt(pTopPa1, 2)} kPa`;
+        document.getElementById('disp-pbot').innerText = `${fmt(pBotPa1, 2)} kPa`;
+    } else {
+        pTopPa1 = Math.max(0, parseFloat(document.getElementById('in-ptop-man').value) || 0);
+        pBotPa1 = Math.max(0, parseFloat(document.getElementById('in-pbot-man').value) || 0);
+    }
+    const slopePa1 = (pBotPa1 - pTopPa1) / H;
+    const pPa1At = (z) => pTopPa1 + slopePa1 * z;
+    const Pa1Trap = integrateTrapezoid(pTopPa1, pBotPa1, H);
+
+    // 3. Presiones laterales sísmicas Pa2 sobre la altura del vástago H
+    let pTopPa2 = 0;
+    let pBotPa2 = 0;
+    let dKae = 0;
+    let Kae = kaRankine;
+    if (h2Mode === 'manual') {
+        pTopPa2 = Math.max(0, parseFloat(document.getElementById('in-pstop').value) || 0);
+        pBotPa2 = Math.max(0, parseFloat(document.getElementById('in-psbot').value) || 0);
+    } else {
+        const kh = Math.max(0, parseFloat(document.getElementById('in-kh').value) || 0);
+        const kv = parseFloat(document.getElementById('in-kv').value) || 0;
+        const denomKv = Math.max(0.2, 1.0 - kv);
+        const psiRad = Math.atan(kh / denomKv);
+        const phiRad = degToRad(phiDeg);
+        const delRad = degToRad(deltaDeg);
+        const phiEff = Math.max(degToRad(0.5), phiRad - psiRad);
+        const num = Math.pow(Math.cos(phiEff), 2);
+        const sqrtTerm = Math.sqrt(Math.max(0, (Math.sin(phiRad + delRad) * Math.sin(phiEff)) / Math.cos(delRad + psiRad)));
+        const den = Math.cos(psiRad) * Math.cos(delRad + psiRad) * Math.pow(1.0 + sqrtTerm, 2);
+        Kae = num / Math.max(0.05, den);
+        dKae = Math.max(0, Kae - Ka);
+        document.getElementById('disp-dkae').innerText = dKae.toFixed(3);
+
+        // Incremento dinámico Mononobe-Okabe distribuido con resultante a 0.60H (Seed & Whitman)
+        pTopPa2 = 0.8 * dKae * gammaS * H;
+        pBotPa2 = 0.2 * dKae * gammaS * H;
+        document.getElementById('disp-mo-press').innerHTML = `K<sub>ae</sub> = ${Kae.toFixed(3)} | Seed–Whitman (0.60H): p<sub>s,0</sub> = <b>${fmt(pTopPa2, 2)}</b> kPa, p<sub>s,H</sub> = <b>${fmt(pBotPa2, 2)}</b> kPa`;
+    }
+    const slopePa2 = (pBotPa2 - pTopPa2) / H;
+    const pPa2At = (z) => Math.max(0, pTopPa2 + slopePa2 * z);
+    const Pa2Trap = integrateTrapezoid(pTopPa2, pBotPa2, H);
+
+    // =========================================================================
+    // A. PREDIMENSIONAMIENTO INICIAL
+    // =========================================================================
+    // Barra asumida N = ceil(1.5 * H) en octavos de pulgada
+    const assumedBarEighths = Math.max(3, Math.ceil(1.5 * H));
+    const assumedDbMm = (assumedBarEighths / 8.0) * 25.4;
+    const phiV = 0.75;
+
+    // 1. Espesor preliminar del vástago tw: phiVc >= 2 * Vu (Vu = 1.6 * Pa1)
+    const VuStemPre = 1.6 * Pa1Trap.F;
+    const dReqStemMm = (2.0 * VuStemPre) / (phiV * 0.17 * Math.sqrt(fc));
+    const twReqMm = dReqStemMm + recubMm + assumedDbMm / 2.0;
+    const tw = Math.max(0.25, ceilToStep(twReqMm / 1000.0, 0.05));
+
+    // 2. Espesor preliminar de la zapata hf con voladizo inicial Lt = 0.20 m, Lh = 0.20 m (phiVc >= Vu)
+    let hfInit = 0.30;
+    const initCantilever = 0.20;
+    for (let i = 0; i < 12; i++) {
+        const wuPre = 1.2 * (gammaS * H + gammaC * hfInit) + 1.6 * qL;
+        const VuFootPre = wuPre * initCantilever;
+        const dReqFootMm = VuFootPre / (phiV * 0.17 * Math.sqrt(fc));
+        const hfReqMm = dReqFootMm + recubMm + assumedDbMm / 2.0;
+        const hfNext = Math.max(0.30, ceilToStep(hfReqMm / 1000.0, 0.05));
+        if (hfNext <= hfInit + 1e-6) break;
+        hfInit = hfNext;
+    }
+
+    // =========================================================================
+    // B. ITERACIÓN GEOTÉCNICA: VOLCAMIENTO + COMPRESIÓN TOTAL (D + Pa1)
+    // =========================================================================
+    let hf = hfInit;
+    let Lt = 0.20;
+    let Lh = 0.20;
+    let volcIterations = [];
+    let fsVolc = 0;
+    let convergedVolc = false;
+
+    // Bucle externo por si el talón o puntera final requiere aumentar hf para cumplir cortante phiVc >= Vu
+    for (let thicknessPass = 0; thicknessPass < 8; thicknessPass++) {
+        Lt = 0.20;
+        Lh = 0.20;
+        volcIterations = [];
+        convergedVolc = false;
+
+        for (let iter = 0; iter < 100; iter++) {
+            const B = Math.round((Lt + tw + Lh) * 100) / 100;
+            const Wfoot = gammaC * B * hf;
+            const Wstem = gammaC * tw * H;
+            const Wsoil = gammaS * Lh * H;
+
+            const N_DH = Wfoot + Wstem + Wsoil;
+            const Me_DH = Wfoot * (B / 2.0) + Wstem * (Lt + tw / 2.0) + Wsoil * (Lt + tw + Lh / 2.0);
+            // Momento volcador respecto a punta inferior de zapata incluye brazo hf
+            const Mv_DH = Pa1Trap.F * (hf + Pa1Trap.yCg);
+            fsVolc = Mv_DH > 1e-6 ? Me_DH / Mv_DH : 99.9;
+
+            const baseCheck = evaluateBasePressure(N_DH, Me_DH, Mv_DH, B);
+
+            volcIterations.push({
+                iter: iter + 1,
+                Lt,
+                Lh,
+                B,
+                Me: Me_DH,
+                Mv: Mv_DH,
+                fs: fsVolc,
+                qMin: baseCheck.qMin,
+                qMax: baseCheck.qMax
+            });
+
+            // Condición dual: FS_volc >= FS_mín Y toda la zapata en compresión (q_mín >= 0) para D + Pa1
+            if (fsVolc >= fsVolcMin && baseCheck.qMin >= -1e-6) {
+                convergedVolc = true;
+                break;
+            }
+
+            // Incremento uniforme de 0.10 m en talón y 50% o 60% en puntera
+            const dLh = 0.10;
+            const dLt = Math.round((dLh * toeRatio) * 100) / 100;
+            Lh = Math.round((Lh + dLh) * 100) / 100;
+            Lt = Math.round((Lt + dLt) * 100) / 100;
+        }
+
+        // Verificar si hf actual resiste cortante en talón y puntera con las longitudes finales Lh y Lt
+        const dFootTestMm = hf * 1000.0 - recubMm - assumedDbMm / 2.0;
+        const phiVcFootTest = (phiV * 0.17 * Math.sqrt(fc) * 1000.0 * dFootTestMm) / 1000.0;
+        const wuHeelTest = 1.2 * (gammaC * hf + gammaS * H) + 1.6 * qL;
+        const VuHeelTest = wuHeelTest * Lh;
+
+        if (VuHeelTest <= phiVcFootTest) {
+            break;
+        }
+        hf = Math.round((hf + 0.05) * 100) / 100;
+    }
+
+    const B = Math.round((Lt + tw + Lh) * 100) / 100;
+    const MvPa1 = Pa1Trap.F * (hf + Pa1Trap.yCg);
+    const MvPa2 = Pa2Trap.F * (hf + Pa2Trap.yCg);
+
+    // Constructor de casos de carga para equilibrio basal
+    const buildLoadCase = (fD, fPa1, fPa2, fL) => {
+        const Wfoot = fD * gammaC * B * hf;
+        const Wstem = fD * gammaC * tw * H;
+        const Wsoil = fD * gammaS * Lh * H;
+        const Wlive = fL * qL * Lh;
+
+        const N = Wfoot + Wstem + Wsoil + Wlive;
+        const Me =
+            Wfoot * (B / 2.0) +
+            Wstem * (Lt + tw / 2.0) +
+            (Wsoil + Wlive) * (Lt + tw + Lh / 2.0);
+
+        const Hlat = fPa1 * Pa1Trap.F + fPa2 * Pa2Trap.F;
+        const Mv = fPa1 * MvPa1 + fPa2 * MvPa2;
+        const base = evaluateBasePressure(N, Me, Mv, B);
+
+        return { Wfoot, Wstem, Wsoil, Wlive, N, Me, Hlat, Mv, base };
+    };
+
+    // Combinaciones de servicio
+    const caseDH = buildLoadCase(1.0, 1.0, 0.0, 0.0);
+    const caseDHL = buildLoadCase(1.0, 1.0, 0.0, 1.0);
+    const caseDHS = buildLoadCase(1.0, 1.0, 1.0, 0.0);
+
+    // =========================================================================
+    // C. DESLIZAMIENTO Y DENTELLÓN / CUÑA DEBAJO DEL VÁSTAGO
+    // =========================================================================
+    const tanDelta = Math.tan(degToRad(deltaDeg));
+    const tanPhi = Math.tan(degToRad(phiDeg));
+    const Kp = Math.pow(Math.tan(degToRad(45.0 + phiDeg / 2.0)), 2);
+
+    const FfrNoKey = caseDH.N * tanDelta;
+    const fsDeslInitial = Pa1Trap.F > 1e-6 ? FfrNoKey / Pa1Trap.F : 99.9;
+
+    const slidingIterations = [{
+        dk: 0,
+        N1: caseDH.N,
+        N2: 0,
+        Ff1: FfrNoKey,
+        Ff2: 0,
+        EpEff: 0,
+        Fr: FfrNoKey,
+        fs: fsDeslInitial
+    }];
+
+    let dk = 0;
+    let fsDeslFinal = fsDeslInitial;
+    let finalSliding = slidingIterations[0];
+
+    if (fsDeslInitial < fsDeslMin && useKey) {
+        for (let k = 1; k <= 25; k++) {
+            dk = Math.round(k * 0.10 * 100) / 100;
+            // Región B1: desde talón hasta cara delantera del dentellón (x ∈ [Lt, B]) -> fricción concreto-suelo tan(δ)
+            const N1 = caseDH.base.integrateForce(Lt, B);
+            // Región B2: desde cara delantera del dentellón hasta puntera (x ∈ [0, Lt]) -> fricción suelo-suelo tan(φ)
+            const N2 = caseDH.base.integrateForce(0, Lt);
+
+            const Ff1 = N1 * tanDelta;
+            const Ff2 = N2 * tanPhi;
+            const EpRaw = 0.5 * Kp * gammaS * dk * dk;
+            const EpEff = passiveFactor * EpRaw;
+            const Fr = Ff1 + Ff2 + EpEff;
+            const fs = Pa1Trap.F > 1e-6 ? Fr / Pa1Trap.F : 99.9;
+
+            const stepObj = { dk, N1, N2, Ff1, Ff2, EpEff, Fr, fs };
+            slidingIterations.push(stepObj);
+            fsDeslFinal = fs;
+            finalSliding = stepObj;
+
+            if (fs >= fsDeslMin) break;
+        }
+    }
+
+    // =========================================================================
+    // D. DISEÑO ESTRUCTURAL NSR-10: VÁSTAGO, TALÓN Y PUNTERA
+    // =========================================================================
+    // 1. VÁSTAGO (Cara interna)
+    const twMm = tw * 1000.0;
+    const dStemMm = twMm - recubMm - assumedDbMm / 2.0;
+    const dStemM = dStemMm / 1000.0;
+    const zCritShear = Math.max(0, H - dStemM);
+
+    const VuStem1 = 1.6 * integrateTrapezoid(pTopPa1, pPa1At(zCritShear), zCritShear).F;
+    const VuStem2 = 1.6 * integrateTrapezoid(pTopPa2, pPa2At(zCritShear), zCritShear).F;
+    const VuStemMax = Math.max(VuStem1, VuStem2);
+    const phiVcStem = (phiV * 0.17 * Math.sqrt(fc) * 1000.0 * dStemMm) / 1000.0;
+
+    const MuStem1 = 1.6 * Pa1Trap.M;
+    const MuStem2 = 1.6 * Pa2Trap.M;
+    const MuStemGov = Math.max(MuStem1, MuStem2);
+    const stemGovLabel = MuStem1 >= MuStem2 ? '1.6 Pa1 (Estático)' : '1.6 Pa2 (Sísmico)';
+
+    const stemFlexure = designFlexureSection(MuStemGov, dStemMm, twMm, fc, fy);
+
+    const stemCurvePoints = [];
+    const nPts = 40;
+    for (let i = 0; i <= nPts; i++) {
+        const z = (H * i) / nPts;
+        const m1 = 1.6 * integrateTrapezoid(pTopPa1, pPa1At(z), z).M;
+        const m2 = 1.6 * integrateTrapezoid(pTopPa2, pPa2At(z), z).M;
+        stemCurvePoints.push({ z, m1, m2, mEnv: Math.max(m1, m2) });
+    }
+
+    // 2. TALÓN (Acero Superior — Cargas descendentes 1.2D + 1.6qL)
+    const hfMm = hf * 1000.0;
+    const dFootMm = hfMm - recubMm - assumedDbMm / 2.0;
+    const phiVcFoot = (phiV * 0.17 * Math.sqrt(fc) * 1000.0 * dFootMm) / 1000.0;
+
+    const wuHeel = 1.2 * (gammaC * hf + gammaS * H) + 1.6 * qL;
+    const VuHeel = wuHeel * Lh;
+    const MuHeel = (wuHeel * Lh * Lh) / 2.0;
+    const heelFlexure = designFlexureSection(MuHeel, dFootMm, hfMm, fc, fy);
+
+    // 3. PUNTERA (Acero Inferior — 4 Combinaciones Últimas)
+    const toeComboSpecs = [
+        { id: '09D16Pa1',    label: '0.9D + 1.6Pa1',        fD: 0.9, fPa1: 1.6, fPa2: 0.0, fL: 0.0 },
+        { id: '09D16Pa2',    label: '0.9D + 1.6Pa2',        fD: 0.9, fPa1: 0.0, fPa2: 1.6, fL: 0.0 },
+        { id: '12D16Pa116L', label: '1.2D + 1.6Pa1 + 1.6qL', fD: 1.2, fPa1: 1.6, fPa2: 0.0, fL: 1.6 },
+        { id: '12D16Pa216L', label: '1.2D + 1.6Pa2 + 1.6qL', fD: 1.2, fPa1: 0.0, fPa2: 1.6, fL: 1.6 }
+    ];
+
+    const toeComboResults = toeComboSpecs.map((spec) => {
+        const lc = buildLoadCase(spec.fD, spec.fPa1, spec.fPa2, spec.fL);
+        const upward = lc.base.integrateToeUpward(Lt);
+        const wSelfToe = spec.fD * gammaC * hf;
+        const VuNet = Math.max(0, upward.V - wSelfToe * Lt);
+        const MuNet = Math.max(0, upward.M - (wSelfToe * Lt * Lt) / 2.0);
+        return {
+            ...spec,
+            lc,
+            qToe: lc.base.qToe,
+            uplifted: lc.base.uplifted,
+            Vu: VuNet,
+            Mu: MuNet
+        };
+    });
+
+    const VuToeMax = Math.max(...toeComboResults.map((c) => c.Vu));
+    const MuToeGovObj = toeComboResults.reduce((prev, curr) => (curr.Mu > prev.Mu ? curr : prev));
+    const toeFlexure = designFlexureSection(MuToeGovObj.Mu, dFootMm, hfMm, fc, fy);
+
+    lastResults = {
+        inputs: {
+            H, qL, h1Mode, h2Mode, Ka, Kae, dKae,
+            pTopPa1, pBotPa1, pTopPa2, pBotPa2,
+            gammaS, gammaC, phiDeg, deltaDeg, qAdm, fc, fy, recubMm,
+            fsVolcMin, fsDeslMin, toeRatio, useKey, passiveFactor
+        },
+        predim: {
+            assumedBarEighths, assumedDbMm, VuStemPre, dReqStemMm, tw, hfInit, hf
+        },
+        geo: {
+            Lt, Lh, tw, hf, H, B, dk,
+            Pa1Trap, Pa2Trap, MvPa1, MvPa2,
+            fsVolc, convergedVolc, volcIterations,
+            caseDH, caseDHL, caseDHS,
+            fsDeslInitial, fsDeslFinal, slidingIterations, finalSliding,
+            Kp, tanDelta, tanPhi
+        },
+        stem: {
+            dStemMm, zCritShear, VuStem1, VuStem2, VuStemMax, phiVcStem,
+            MuStem1, MuStem2, MuStemGov, stemGovLabel,
+            flexure: stemFlexure,
+            curvePoints: stemCurvePoints
+        },
+        heel: {
+            dFootMm, wuHeel, VuHeel, MuHeel, phiVcFoot,
+            flexure: heelFlexure
+        },
+        toe: {
+            dFootMm, phiVcFoot,
+            combos: toeComboResults,
+            VuToeMax,
+            govCombo: MuToeGovObj,
+            flexure: toeFlexure
+        }
+    };
+
+    renderAll(lastResults);
+    guardarConfiguracion();
+}
+
+// ===========================================================================
+// RENDERIZADO DE LA INTERFAZ, TABLAS Y GRÁFICOS SVG
+// ===========================================================================
+function badgeHTML(ok, okText = 'CUMPLE', failText = 'REVISAR') {
+    return ok
+        ? `<span class="badge-ok">${okText}</span>`
+        : `<span class="badge-fail">${failText}</span>`;
+}
+
+function renderAll(res) {
+    renderSidebarSummary(res);
+    renderWallSVG(res);
+    renderGeoTab(res);
+    renderStemTab(res);
+    renderFootingTab(res);
+    renderReportTab(res);
+}
+
+function renderSidebarSummary(res) {
+    const { geo, inputs, stem, heel, toe } = res;
+    const okVolc = geo.fsVolc >= inputs.fsVolcMin && geo.caseDH.base.qMin >= -1e-6;
+    const okDesl = geo.fsDeslFinal >= inputs.fsDeslMin;
+    const okPort = geo.caseDH.base.qMax <= inputs.qAdm && geo.caseDHL.base.qMax <= inputs.qAdm;
+    const okShear = stem.VuStemMax <= stem.phiVcStem && heel.VuHeel <= heel.phiVcFoot && toe.VuToeMax <= toe.phiVcFoot;
+
+    document.getElementById('resumen-lateral-cards').innerHTML = `
+        <div class="caja-metrica">
+            <span style="display:block; color:var(--secondary); font-weight:600; font-size:0.78em; text-transform:uppercase; margin-bottom:4px;">Geometría Adoptada (b = 1.00 m)</span>
+            <div class="valor-sutil">Zapata Total (B): <span class="mono">${fmt(geo.B, 2)} m</span> (L<sub>t</sub>=${fmt(geo.Lt)} / L<sub>h</sub>=${fmt(geo.Lh)})</div>
+            <div class="valor-sutil">Vástago t<sub>w</sub> / Zapata h<sub>f</sub>: <span class="mono">${fmt(geo.tw, 2)} m / ${fmt(geo.hf, 2)} m</span></div>
+            <div class="valor-sutil">Dentellón bajo vástago: <span class="mono">${geo.dk > 0 ? `d_k = ${fmt(geo.dk, 2)} m` : 'No requerido (0.00 m)'}</span></div>
+        </div>
+
+        <div class="caja-metrica ${okVolc && okDesl ? '' : 'caja-alerta'}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="color:var(--secondary); font-weight:600; font-size:0.78em; text-transform:uppercase;">Estabilidad Geotécnica</span>
+                ${badgeHTML(okVolc && okDesl)}
+            </div>
+            <div class="valor-sutil">FS Volcamiento: <span class="mono">${fmt(geo.fsVolc, 2)}</span> (mín ${fmt(inputs.fsVolcMin, 1)})</div>
+            <div class="valor-sutil">FS Deslizamiento: <span class="mono">${fmt(geo.fsDeslFinal, 2)}</span> (mín ${fmt(inputs.fsDeslMin, 1)})</div>
+            ${!geo.convergedVolc ? `<div class="alerta-interna">⚠️ Límite de iteraciones alcanzado en volcamiento.</div>` : ''}
+            ${!okDesl ? `<div class="alerta-interna">⚠️ FS deslizamiento inferior al mínimo requerido.</div>` : ''}
+        </div>
+
+        <div class="caja-metrica ${okPort ? '' : 'caja-alerta'}">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="color:var(--secondary); font-weight:600; font-size:0.78em; text-transform:uppercase;">Presiones Basales (Servicio)</span>
+                ${badgeHTML(okPort)}
+            </div>
+            <div class="valor-sutil">q<sub>máx</sub> (D + P<sub>a1</sub>): <span class="mono">${fmt(geo.caseDH.base.qMax, 1)} kPa</span> (q<sub>mín</sub>=${fmt(geo.caseDH.base.qMin, 1)})</div>
+            <div class="valor-sutil">q<sub>máx</sub> (D + P<sub>a1</sub> + q<sub>L</sub>): <span class="mono">${fmt(geo.caseDHL.base.qMax, 1)} kPa</span> (q<sub>adm</sub>=${fmt(inputs.qAdm, 0)})</div>
+            ${!okPort ? `<div class="alerta-interna">⚠️ Presión de contacto supera q<sub>adm</sub> = ${fmt(inputs.qAdm, 0)} kPa.</div>` : ''}
+        </div>
+
+        <div class="caja-metrica ${okShear ? '' : 'caja-alerta'}" style="margin-bottom:0;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                <span style="color:var(--secondary); font-weight:600; font-size:0.78em; text-transform:uppercase;">Diseño Estructural NSR-10</span>
+                ${badgeHTML(okShear, 'CORTANTE OK', 'REVISAR CORTANTE')}
+            </div>
+            <div class="valor-sutil">A<sub>s</sub> Vástago (Cara Int.): <span class="mono">${Math.round(stem.flexure.AsDesign)} mm²/m</span></div>
+            <div class="valor-sutil">A<sub>s</sub> Talón (Superior): <span class="mono">${Math.round(heel.flexure.AsDesign)} mm²/m</span></div>
+            <div class="valor-sutil">A<sub>s</sub> Puntera (Inferior): <span class="mono">${Math.round(toe.flexure.AsDesign)} mm²/m</span></div>
+        </div>
+    `;
+}
+
+function renderWallSVG(res) {
+    const svg = document.getElementById('wall-svg');
+    const { geo, inputs, toe } = res;
+    const comboKey = document.getElementById('svg-pressure-combo').value;
+
+    let activeCase = geo.caseDH;
+    if (comboKey === 'DHL') activeCase = geo.caseDHL;
+    else if (comboKey === 'DHS') activeCase = geo.caseDHS;
+    else if (comboKey === '09DH1') activeCase = toe.combos[0].lc;
+    else if (comboKey === '12DH1L') activeCase = toe.combos[2].lc;
+    else if (comboKey === '12DH2L') activeCase = toe.combos[3].lc;
+
+    const baseP = activeCase.base;
+
+    const W = 920;
+    const Hsvg = 530;
+    const marginL = 135;
+    const marginR = 265;
+    const marginT = 52;
+    const marginB = 135;
+
+    const totalVerticalM = geo.H + geo.hf + geo.dk;
+    const maxSpanX = Math.max(geo.B, 2.4);
+    const scaleX = (W - marginL - marginR) / maxSpanX;
+    const scaleY = (Hsvg - marginT - marginB) / totalVerticalM;
+    const scale = Math.min(scaleX, scaleY);
+
+    const wallPixelW = geo.B * scale;
+    const x0 = marginL + ((W - marginL - marginR) - wallPixelW) / 2.0;
+    const yTop = marginT;
+    const yFootTop = yTop + geo.H * scale;
+    const yFootBot = yFootTop + geo.hf * scale;
+    const yKeyBot = yFootBot + geo.dk * scale;
+
+    const xToeFront = x0;
+    const xStemFront = x0 + geo.Lt * scale;
+    const xStemBack = x0 + (geo.Lt + geo.tw) * scale;
+    const xHeelBack = x0 + geo.B * scale;
+
+    // Polígono de concreto (vástago + zapata + dentellón bajo vástago)
+    let concretePoints = `${xStemFront},${yTop} ${xStemBack},${yTop} ${xStemBack},${yFootTop} ${xHeelBack},${yFootTop} ${xHeelBack},${yFootBot} `;
+    if (geo.dk > 0) {
+        concretePoints += `${xStemBack},${yFootBot} ${xStemBack},${yKeyBot} ${xStemFront},${yKeyBot} ${xStemFront},${yFootBot} `;
+    }
+    concretePoints += `${xToeFront},${yFootBot} ${xToeFront},${yFootTop} ${xStemFront},${yFootTop}`;
+
+    // Diagrama de empuje Pa1 sobre altura H del vástago
+    const pDiagX0 = xHeelBack + 22;
+    const maxP = Math.max(inputs.pBotPa1, inputs.pTopPa2, inputs.pBotPa2, 10);
+    const pScale = 115 / maxP;
+    const pTopW = inputs.pTopPa1 * pScale;
+    const pBotW = inputs.pBotPa1 * pScale;
+    const h1Poly = `${pDiagX0},${yTop} ${pDiagX0 + pTopW},${yTop} ${pDiagX0 + pBotW},${yFootTop} ${pDiagX0},${yFootTop}`;
+    const yCgPa1 = yFootTop - geo.Pa1Trap.yCg * scale;
+
+    // Diagrama sísmico Pa2 sobre altura H
+    let h2Svg = '';
+    if (inputs.pTopPa2 > 0 || inputs.pBotPa2 > 0) {
+        const sDiagX0 = pDiagX0 + Math.max(pBotW, pTopW) + 32;
+        const sTopW = inputs.pTopPa2 * pScale;
+        const sBotW = inputs.pBotPa2 * pScale;
+        const h2Poly = `${sDiagX0},${yTop} ${sDiagX0 + sTopW},${yTop} ${sDiagX0 + sBotW},${yFootTop} ${sDiagX0},${yFootTop}`;
+        h2Svg = `
+            <polygon points="${h2Poly}" fill="rgba(217, 83, 79, 0.14)" stroke="#D9534F" stroke-width="1.5" stroke-dasharray="4 3"/>
+            <text x="${sDiagX0}" y="${yTop - 8}" fill="#D9534F" font-size="10" font-weight="600" font-family="JetBrains Mono">Pa2 (Sísmico)</text>
+            <text x="${sDiagX0 + sTopW + 4}" y="${yTop + 10}" fill="#D9534F" font-size="10" font-family="JetBrains Mono">${fmt(inputs.pTopPa2, 1)}</text>
+            <text x="${sDiagX0 + sBotW + 4}" y="${yFootTop}" fill="#D9534F" font-size="10" font-family="JetBrains Mono">${fmt(inputs.pBotPa2, 1)}</text>
+        `;
+    }
+
+    // Diagrama de presiones bajo la zapata
+    const yPressTop = yKeyBot + 16;
+    const maxPressHeight = 66;
+    const qScale = baseP.qMax > 1e-6 ? maxPressHeight / baseP.qMax : 0;
+    const xEndContact = baseP.uplifted && baseP.e > geo.B / 6.0
+        ? xToeFront + baseP.contactLength * scale
+        : xHeelBack;
+    const qToeH = baseP.qToe * qScale;
+    const qHeelH = baseP.qHeel * qScale;
+    const bearingPoly = `${xToeFront},${yPressTop} ${xEndContact},${yPressTop} ${xEndContact},${yPressTop + qHeelH} ${xToeFront},${yPressTop + qToeH}`;
+
+    svg.innerHTML = `
+        <defs>
+            <pattern id="soilHatchLight" width="10" height="10" patternTransform="rotate(45 0 0)" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="0" x2="0" y2="10" stroke="rgba(92, 109, 126, 0.18)" stroke-width="1.5" />
+            </pattern>
+            <marker id="arrowAccent" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                <path d="M 0 1 L 10 5 L 0 9 z" fill="#E67E22" />
+            </marker>
+        </defs>
+
+        <!-- Relleno de suelo sobre el talón -->
+        <rect x="${xStemBack}" y="${yTop}" width="${xHeelBack - xStemBack}" height="${yFootTop - yTop}" fill="url(#soilHatchLight)" />
+        <line x1="${xStemBack}" y1="${yTop}" x2="${xHeelBack + 18}" y2="${yTop}" stroke="#5C6D7E" stroke-width="1.5" />
+
+        <!-- Sobrecarga qL -->
+        ${inputs.qL > 0 ? `
+            <rect x="${xStemBack}" y="${yTop - 16}" width="${xHeelBack - xStemBack}" height="16" fill="rgba(230, 126, 34, 0.15)" stroke="#E67E22" stroke-width="1" />
+            <text x="${(xStemBack + xHeelBack)/2}" y="${yTop - 4}" text-anchor="middle" fill="#B45309" font-size="10" font-weight="600" font-family="JetBrains Mono">qL = ${fmt(inputs.qL, 1)} kPa</text>
+        ` : ''}
+
+        <!-- Concreto del muro -->
+        <polygon points="${concretePoints}" fill="#DCE3EA" stroke="#1A2530" stroke-width="2" stroke-linejoin="round" />
+
+        <!-- Empuje pasivo frente al dentellón -->
+        ${geo.dk > 0 ? `
+            <polygon points="${xStemFront},${yFootBot} ${xStemFront - 34},${yKeyBot} ${xStemFront},${yKeyBot}" fill="rgba(30, 132, 73, 0.22)" stroke="#1E8449" stroke-width="1.5" />
+            <text x="${xStemFront - 38}" y="${yKeyBot - 3}" text-anchor="end" fill="#1E8449" font-size="10" font-weight="600" font-family="JetBrains Mono">ηp·Pp=${fmt(geo.finalSliding.EpEff, 1)} kN</text>
+            <text x="${(xStemFront + xStemBack)/2}" y="${(yFootBot + yKeyBot)/2 + 3}" text-anchor="middle" fill="#1A2530" font-size="9" font-weight="700" font-family="JetBrains Mono">dk=${fmt(geo.dk, 2)}</text>
+        ` : ''}
+
+        <!-- Cotas verticales H y hf -->
+        <line x1="${xToeFront - 34}" y1="${yTop}" x2="${xToeFront - 34}" y2="${yFootTop}" stroke="#5C6D7E" stroke-width="1" />
+        <line x1="${xToeFront - 40}" y1="${yTop}" x2="${xToeFront - 28}" y2="${yTop}" stroke="#5C6D7E" stroke-width="1" />
+        <line x1="${xToeFront - 40}" y1="${yFootTop}" x2="${xToeFront - 28}" y2="${yFootTop}" stroke="#5C6D7E" stroke-width="1" />
+        <text x="${xToeFront - 42}" y="${(yTop + yFootTop)/2}" text-anchor="end" fill="#1A2530" font-size="11" font-weight="600" font-family="JetBrains Mono">H=${fmt(geo.H, 2)}m</text>
+
+        <line x1="${xToeFront - 34}" y1="${yFootTop}" x2="${xToeFront - 34}" y2="${yFootBot}" stroke="#5C6D7E" stroke-width="1" />
+        <line x1="${xToeFront - 40}" y1="${yFootBot}" x2="${xToeFront - 28}" y2="${yFootBot}" stroke="#5C6D7E" stroke-width="1" />
+        <text x="${xToeFront - 42}" y="${(yFootTop + yFootBot)/2 + 4}" text-anchor="end" fill="#E67E22" font-size="11" font-weight="600" font-family="JetBrains Mono">hf=${fmt(geo.hf, 2)}m</text>
+
+        <!-- Cota espesor vástago tw -->
+        <line x1="${xStemFront}" y1="${yTop - 10}" x2="${xStemBack}" y2="${yTop - 10}" stroke="#1A2530" stroke-width="1.2" />
+        <text x="${(xStemFront + xStemBack)/2}" y="${yTop - 16}" text-anchor="middle" fill="#1A2530" font-size="11" font-weight="600" font-family="JetBrains Mono">tw=${fmt(geo.tw, 2)}m</text>
+
+        <!-- Cotas puntera Lt y talón Lh -->
+        <text x="${(xToeFront + xStemFront)/2}" y="${yFootTop - 5}" text-anchor="middle" fill="#1A2530" font-size="10" font-weight="600" font-family="JetBrains Mono">Lt=${fmt(geo.Lt, 2)}m</text>
+        <text x="${(xStemBack + xHeelBack)/2}" y="${yFootTop - 5}" text-anchor="middle" fill="#1A2530" font-size="10" font-weight="600" font-family="JetBrains Mono">Lh=${fmt(geo.Lh, 2)}m</text>
+
+        <!-- Diagrama de empuje Pa1 -->
+        <polygon points="${h1Poly}" fill="rgba(230, 126, 34, 0.16)" stroke="#E67E22" stroke-width="1.8" />
+        <text x="${pDiagX0}" y="${yTop - 8}" fill="#B45309" font-size="10" font-weight="600" font-family="JetBrains Mono">Pa1 (Sobre H)</text>
+        <text x="${pDiagX0 + pTopW + 4}" y="${yTop + 10}" fill="#B45309" font-size="10" font-family="JetBrains Mono">${fmt(inputs.pTopPa1, 1)} kPa</text>
+        <text x="${pDiagX0 + pBotW + 4}" y="${yFootTop}" fill="#B45309" font-size="10" font-family="JetBrains Mono">${fmt(inputs.pBotPa1, 1)} kPa</text>
+
+        <!-- Resultante Pa1 -->
+        <line x1="${pDiagX0 + pBotW + 38}" y1="${yCgPa1}" x2="${pDiagX0 + 3}" y2="${yCgPa1}" stroke="#E67E22" stroke-width="2.2" marker-end="url(#arrowAccent)" />
+        <text x="${pDiagX0 + pBotW + 42}" y="${yCgPa1 - 3}" fill="#B45309" font-size="10" font-weight="700" font-family="JetBrains Mono">Pa1=${fmt(geo.Pa1Trap.F, 1)} kN/m</text>
+        <text x="${pDiagX0 + pBotW + 42}" y="${yCgPa1 + 10}" fill="#5C6D7E" font-size="9" font-family="JetBrains Mono">brazo base=${fmt(geo.hf + geo.Pa1Trap.yCg, 2)}m</text>
+
+        ${h2Svg}
+
+        <!-- Diagrama de presiones bajo la zapata -->
+        <line x1="${xToeFront}" y1="${yPressTop}" x2="${xHeelBack}" y2="${yPressTop}" stroke="#5C6D7E" stroke-width="1" stroke-dasharray="3 3" />
+        <polygon points="${bearingPoly}" fill="rgba(30, 132, 73, 0.18)" stroke="#1E8449" stroke-width="1.8" />
+        <text x="${xToeFront}" y="${yPressTop + qToeH + 14}" text-anchor="start" fill="#1E8449" font-size="11" font-weight="700" font-family="JetBrains Mono">q_punt=${fmt(baseP.qToe, 1)} kPa</text>
+        <text x="${xHeelBack}" y="${yPressTop + Math.max(qHeelH, 12) + 14}" text-anchor="end" fill="#1E8449" font-size="11" font-weight="600" font-family="JetBrains Mono">q_talón=${fmt(baseP.qHeel, 1)} kPa</text>
+        <text x="${(xToeFront + xHeelBack)/2}" y="${yPressTop + maxPressHeight + 28}" text-anchor="middle" fill="#1A2530" font-size="11" font-weight="700" font-family="JetBrains Mono">B = ${fmt(geo.B, 2)} m  |  e = ${fmt(baseP.e, 3)} m ${baseP.uplifted ? '(Despegue parcial)' : '(Compresión total)'}</text>
+    `;
+}
+
+function renderGeoTab(res) {
+    const { predim, geo, inputs } = res;
+    const okVolc = geo.fsVolc >= inputs.fsVolcMin && geo.caseDH.base.qMin >= -1e-6;
+    const okDesl = geo.fsDeslFinal >= inputs.fsDeslMin;
+
+    document.getElementById('badge-volc').innerHTML = badgeHTML(okVolc, `FS = ${fmt(geo.fsVolc)} ≥ ${fmt(inputs.fsVolcMin, 1)}`, `FS = ${fmt(geo.fsVolc)}`);
+    document.getElementById('badge-desl').innerHTML = badgeHTML(okDesl, `FS = ${fmt(geo.fsDeslFinal)} ≥ ${fmt(inputs.fsDeslMin, 1)}`, `FS = ${fmt(geo.fsDeslFinal)}`);
+
+    document.getElementById('predim-summary').innerHTML = `
+        <div class="w3-col s4">
+            <div class="caja-metrica" style="padding:8px 10px; margin-bottom:6px;">
+                <span class="valor-sutil" style="display:block;">Barra Asumida</span>
+                <span class="mono" style="font-weight:700;">N°${predim.assumedBarEighths} (${fmt(predim.assumedDbMm, 1)}mm)</span>
+            </div>
+        </div>
+        <div class="w3-col s4">
+            <div class="caja-metrica" style="padding:8px 10px; margin-bottom:6px;">
+                <span class="valor-sutil" style="display:block;">t<sub>w</sub> (φVc ≥ 2Vu)</span>
+                <span class="mono" style="font-weight:700; color:var(--primary);">${fmt(predim.tw, 2)} m</span>
+            </div>
+        </div>
+        <div class="w3-col s4">
+            <div class="caja-metrica" style="padding:8px 10px; margin-bottom:6px;">
+                <span class="valor-sutil" style="display:block;">h<sub>f</sub> (ini → fin)</span>
+                <span class="mono" style="font-weight:700; color:var(--primary);">${fmt(predim.hfInit, 2)} → ${fmt(predim.hf, 2)} m</span>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('tbody-volc-iter').innerHTML = geo.volcIterations.map((row, idx) => {
+        const isLast = idx === geo.volcIterations.length - 1;
+        return `
+            <tr class="${isLast ? 'fila-destacada' : ''}">
+                <td>${row.iter}</td>
+                <td>${fmt(row.Lt, 2)}</td>
+                <td>${fmt(row.Lh, 2)}</td>
+                <td>${fmt(row.B, 2)}</td>
+                <td>${fmt(row.fs, 2)}</td>
+                <td>${fmt(row.qMin, 1)}</td>
+            </tr>
+        `;
+    }).join('');
+
+    const sd = geo.finalSliding;
+    let keyTableHTML = '';
+    if (geo.slidingIterations.length > 1) {
+        keyTableHTML = `
+            <div style="max-height: 150px; overflow-y: auto; margin-top: 8px;">
+                <table class="tabla-ce mono">
+                    <thead>
+                        <tr>
+                            <th>d<sub>k</sub> (m)</th>
+                            <th>N<sub>1</sub>·tanδ</th>
+                            <th>N<sub>2</sub>·tanφ</th>
+                            <th>η<sub>p</sub>·P<sub>p</sub></th>
+                            <th>FS<sub>desl</sub></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${geo.slidingIterations.map((s, i) => `
+                            <tr class="${i === geo.slidingIterations.length - 1 ? 'fila-destacada' : ''}">
+                                <td>${fmt(s.dk, 2)}</td>
+                                <td>${fmt(s.Ff1, 1)}</td>
+                                <td>${fmt(s.Ff2, 1)}</td>
+                                <td>${fmt(s.EpEff, 1)}</td>
+                                <td>${fmt(s.fs, 2)}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </div>
+        `;
+    }
+
+    document.getElementById('sliding-details').innerHTML = `
+        <div class="w3-row-padding" style="margin: 0 -4px;">
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px 10px; margin-bottom:6px;">
+                    <span class="valor-sutil" style="display:block;">FS Sin Cuña</span>
+                    <span class="mono" style="font-weight:700;">${fmt(geo.fsDeslInitial, 2)}</span>
+                </div>
+            </div>
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px 10px; margin-bottom:6px;">
+                    <span class="valor-sutil" style="display:block;">Dentellón d<sub>k</sub></span>
+                    <span class="mono" style="font-weight:700;">${fmt(geo.dk, 2)} m</span>
+                </div>
+            </div>
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px 10px; margin-bottom:6px;">
+                    <span class="valor-sutil" style="display:block;">Coef. Pasivo K<sub>p</sub></span>
+                    <span class="mono" style="font-weight:700;">${fmt(geo.Kp, 2)}</span>
+                </div>
+            </div>
+        </div>
+        <div class="nota-tecnica mono" style="margin-top:0;">
+            F<sub>R</sub> = ${fmt(sd.Fr, 1)} kN/m | P<sub>a1</sub> = ${fmt(geo.Pa1Trap.F, 1)} kN/m → FS<sub>desl</sub> = <b>${fmt(geo.fsDeslFinal, 2)}</b>
+        </div>
+        ${keyTableHTML}
+    `;
+
+    const portCases = [
+        { name: 'D + Pa1 (Estático)', b: geo.caseDH.base },
+        { name: 'D + Pa1 + qL', b: geo.caseDHL.base },
+        { name: 'D + Pa1 + Pa2 (Sísmico)', b: geo.caseDHS.base }
+    ];
+    const allPortOk = geo.caseDH.base.qMax <= inputs.qAdm && geo.caseDHL.base.qMax <= inputs.qAdm;
+    document.getElementById('badge-bearing').innerHTML = badgeHTML(allPortOk);
+
+    document.getElementById('tbody-bearing').innerHTML = portCases.map((c) => {
+        const ok = c.b.qMax <= inputs.qAdm && c.b.qMin >= -1e-6;
+        return `
+            <tr>
+                <td style="font-family:'Inter',sans-serif; font-weight:500;">${c.name}</td>
+                <td>${fmt(c.b.e, 3)}</td>
+                <td><b>${fmt(c.b.qToe, 1)}</b></td>
+                <td>${fmt(c.b.qHeel, 1)}</td>
+                <td>${badgeHTML(ok, 'OK', c.b.qMin < 0 ? 'DESPEGUE' : 'EXCEDE')}</td>
+            </tr>
+        `;
+    }).join('');
+}
+
+function renderBarsTableHTML(flexure) {
+    return flexure.proposals.map((p) => `
+        <tr style="${p.ok ? '' : 'opacity:0.6;'}">
+            <td><b>${p.label}</b></td>
+            <td>${fmt(p.sExact, 3)}</td>
+            <td><b>${p.sRounded >= 0.05 ? `N°${p.num} @ ${fmt(p.sRounded, 2)} m` : 'Muy cerrada'}</b></td>
+            <td>${p.sRounded >= 0.05 ? `${Math.round(p.AsProvided)} mm²` : '—'}</td>
+            <td>${badgeHTML(p.ok, 'CUMPLE', p.statusText)}</td>
+        </tr>
+    `).join('');
+}
+
+function renderStemTab(res) {
+    const { stem } = res;
+    const okShear1 = stem.VuStem1 <= stem.phiVcStem;
+    const okShear2 = stem.VuStem2 <= stem.phiVcStem;
+
+    document.getElementById('stem-checks').innerHTML = `
+        <div class="w3-row-padding" style="margin: 0 -4px;">
+            <div class="w3-col s6">
+                <div class="caja-metrica" style="padding:10px;">
+                    <span class="valor-sutil" style="display:block;">Peralte Efectivo d<sub>vástago</sub></span>
+                    <span class="valor-protag">${fmt(stem.dStemMm, 1)} mm</span>
+                    <span class="valor-sutil" style="display:block;">Corte crítico a z = ${fmt(stem.zCritShear, 2)} m</span>
+                </div>
+            </div>
+            <div class="w3-col s6">
+                <div class="caja-metrica ${okShear1 && okShear2 ? '' : 'caja-alerta'}" style="padding:10px;">
+                    <span class="valor-sutil" style="display:block;">Capacidad Cortante φV<sub>c</sub></span>
+                    <span class="valor-protag" style="color:var(--success);">${fmt(stem.phiVcStem, 1)} kN/m</span>
+                    <span class="valor-sutil" style="display:block;">Vu1=${fmt(stem.VuStem1, 1)} | Vu2=${fmt(stem.VuStem2, 1)} kN/m</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="caja-metrica mono" style="font-size:0.84em;">
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">M<sub>u1</sub> base (1.6 P<sub>a1</sub>):</span>
+                <span>${fmt(stem.MuStem1, 2)} kN·m/m</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">M<sub>u2</sub> base (1.6 P<sub>a2</sub>):</span>
+                <span>${fmt(stem.MuStem2, 2)} kN·m/m</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border-light); padding-top:4px; margin-top:4px;">
+                <span style="color:var(--accent); font-weight:700;">M<sub>u</sub> Gobernante (${stem.stemGovLabel}):</span>
+                <span style="font-weight:700;">${fmt(stem.MuStemGov, 2)} kN·m/m</span>
+            </div>
+        </div>
+
+        <div class="w3-row-padding" style="margin: 0 -4px;">
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px; text-align:center;">
+                    <span class="valor-sutil" style="display:block;">A<sub>s,flexión</sub></span>
+                    <span class="mono" style="font-weight:700;">${Math.round(stem.flexure.AsReq)} mm²</span>
+                </div>
+            </div>
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px; text-align:center;">
+                    <span class="valor-sutil" style="display:block;">A<sub>s,mín</sub> (0.00333bd)</span>
+                    <span class="mono" style="font-weight:700;">${Math.round(stem.flexure.AsMin)} mm²</span>
+                </div>
+            </div>
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px; text-align:center; background:#FFF7ED; border-color:#FED7AA;">
+                    <span class="valor-sutil" style="display:block; color:#9A3412;">A<sub>s,diseño</sub></span>
+                    <span class="mono" style="font-weight:700; color:#9A3412;">${Math.round(stem.flexure.AsDesign)} mm²</span>
+                </div>
+            </div>
+        </div>
+    `;
+
+    document.getElementById('tbody-stem-bars').innerHTML = renderBarsTableHTML(stem.flexure);
+    document.getElementById('stem-rebar-notes').innerHTML = `
+        <b>Verificación Normativa NSR-10:</b> Separación máxima s<sub>máx</sub> = min(3t<sub>w</sub>, 450 mm) = <b>${(stem.flexure.sMaxMm / 1000).toFixed(2)} m</b>; deformación unitaria en tracción verificada ε<sub>t</sub> ≥ 0.005 (φ = 0.90).
+    `;
+
+    renderStemMomentDiagram(res);
+}
+
+function renderStemMomentDiagram(res) {
+    const { stem, inputs, geo } = res;
+    const barNum = parseInt(document.getElementById('sel-stem-bar').value, 10) || 5;
+    const spacingMm = Math.max(50, parseFloat(document.getElementById('in-stem-spacing').value) || 200);
+    const cutoffEnabled = document.getElementById('in-stem-cutoff-enable').checked;
+    const cutoffInput = document.getElementById('in-stem-cutoff-h');
+    cutoffInput.disabled = !cutoffEnabled;
+    const cutoffFromBase = Math.min(geo.H - 0.1, Math.max(0.2, parseFloat(cutoffInput.value) || geo.H / 2.0));
+
+    const bar = REBAR_CATALOG.find((b) => b.num === barNum) || REBAR_CATALOG[2];
+    const AsBase = (bar.areaMm2 * 1000.0) / spacingMm;
+    const AsTop = (bar.areaMm2 * 1000.0) / (spacingMm * 2.0);
+    const capBase = computeSectionCapacity(AsBase, stem.dStemMm, inputs.fc, inputs.fy);
+    const capTop = computeSectionCapacity(AsTop, stem.dStemMm, inputs.fc, inputs.fy);
+
+    const okBaseCap = capBase.phiMn >= stem.MuStemGov;
+    document.getElementById('stem-capacity-banner').innerHTML = `
+        <div>
+            <span class="valor-sutil">Refuerzo Base:</span>
+            <span class="mono" style="font-weight:700;">N°${barNum} @ ${spacingMm} mm</span>
+            <span class="valor-sutil mono"> (A<sub>s</sub>=${Math.round(AsBase)} mm²/m | ε<sub>t</sub>=${capBase.et.toFixed(4)} | φ=${capBase.phi.toFixed(2)})</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <span class="mono" style="font-weight:700; color:var(--success);">φM<sub>n,base</sub> = ${fmt(capBase.phiMn, 1)} kN·m</span>
+            ${badgeHTML(okBaseCap, 'CUBRE Mu', 'INSUFICIENTE')}
+        </div>
+    `;
+
+    const svg = document.getElementById('stem-moment-svg');
+    const W = 640;
+    const Hsvg = 430;
+    const padL = 75;
+    const padR = 45;
+    const padT = 38;
+    const padB = 52;
+    const plotW = W - padL - padR;
+    const plotH = Hsvg - padT - padB;
+
+    const maxM = Math.max(stem.MuStemGov, capBase.phiMn, 20) * 1.15;
+    const xOfM = (m) => padL + (m / maxM) * plotW;
+    const yOfZ = (z) => padT + (z / geo.H) * plotH;
+
+    const ptsH1 = stem.curvePoints.map((pt) => `${xOfM(pt.m1).toFixed(1)},${yOfZ(pt.z).toFixed(1)}`).join(' ');
+    const ptsH2 = stem.curvePoints.map((pt) => `${xOfM(pt.m2).toFixed(1)},${yOfZ(pt.z).toFixed(1)}`).join(' ');
+
+    let phiMnPath = '';
+    if (!cutoffEnabled) {
+        phiMnPath = `M ${xOfM(capBase.phiMn)} ${yOfZ(0)} L ${xOfM(capBase.phiMn)} ${yOfZ(geo.H)}`;
+    } else {
+        const zCutFromCrown = geo.H - cutoffFromBase;
+        phiMnPath = `
+            M ${xOfM(capTop.phiMn)} ${yOfZ(0)}
+            L ${xOfM(capTop.phiMn)} ${yOfZ(zCutFromCrown)}
+            L ${xOfM(capBase.phiMn)} ${yOfZ(zCutFromCrown)}
+            L ${xOfM(capBase.phiMn)} ${yOfZ(geo.H)}
+        `;
+    }
+
+    let yTicksSVG = '';
+    const stepZ = geo.H <= 4 ? 0.5 : 1.0;
+    for (let z = 0; z <= geo.H + 1e-6; z += stepZ) {
+        const py = yOfZ(z);
+        yTicksSVG += `
+            <line x1="${padL - 5}" y1="${py}" x2="${W - padR}" y2="${py}" stroke="#E2E7EC" stroke-width="1" />
+            <text x="${padL - 10}" y="${py + 4}" text-anchor="end" fill="#5C6D7E" font-size="10" font-family="JetBrains Mono">${fmt(z, 1)}m</text>
+        `;
+    }
+
+    let xTicksSVG = '';
+    const nXTicks = 5;
+    for (let i = 0; i <= nXTicks; i++) {
+        const mVal = (maxM * i) / nXTicks;
+        const px = xOfM(mVal);
+        xTicksSVG += `
+            <line x1="${px}" y1="${padT}" x2="${px}" y2="${Hsvg - padB + 5}" stroke="#E2E7EC" stroke-width="1" />
+            <text x="${px}" y="${Hsvg - padB + 18}" text-anchor="middle" fill="#5C6D7E" font-size="10" font-family="JetBrains Mono">${Math.round(mVal)}</text>
+        `;
+    }
+
+    svg.innerHTML = `
+        ${yTicksSVG}
+        ${xTicksSVG}
+
+        <line x1="${padL}" y1="${padT}" x2="${padL}" y2="${Hsvg - padB}" stroke="#1A2530" stroke-width="1.5" />
+        <line x1="${padL}" y1="${Hsvg - padB}" x2="${W - padR}" y2="${Hsvg - padB}" stroke="#1A2530" stroke-width="1.5" />
+
+        <text x="${padL - 44}" y="${padT + plotH / 2}" transform="rotate(-90 ${padL - 44} ${padT + plotH / 2})" text-anchor="middle" fill="#1A2530" font-size="11" font-weight="600" font-family="Inter">Profundidad z desde corona (m)</text>
+        <text x="${padL + plotW / 2}" y="${Hsvg - 12}" text-anchor="middle" fill="#1A2530" font-size="11" font-weight="600" font-family="Inter">Momento Flector Mayorado Mu y Resistente φMn (kN·m/m)</text>
+
+        <polyline fill="none" stroke="#E67E22" stroke-width="2.5" points="${ptsH1}" />
+        <polyline fill="none" stroke="#D9534F" stroke-width="2" stroke-dasharray="5 3" points="${ptsH2}" />
+        <path d="${phiMnPath}" fill="none" stroke="#1E8449" stroke-width="3" />
+
+        <g transform="translate(${padL + 8}, 14)">
+            <line x1="0" y1="5" x2="18" y2="5" stroke="#E67E22" stroke-width="2.5" />
+            <text x="23" y="9" fill="#B45309" font-size="10" font-weight="600" font-family="JetBrains Mono">Mu (1.6 Pa1)</text>
+
+            <line x1="125" y1="5" x2="143" y2="5" stroke="#D9534F" stroke-width="2" stroke-dasharray="4 2" />
+            <text x="148" y="9" fill="#D9534F" font-size="10" font-weight="600" font-family="JetBrains Mono">Mu (1.6 Pa2)</text>
+
+            <line x1="250" y1="5" x2="268" y2="5" stroke="#1E8449" stroke-width="3" />
+            <text x="273" y="9" fill="#1E8449" font-size="10" font-weight="700" font-family="JetBrains Mono">φMn (${fmt(capBase.phiMn, 1)} kN·m)</text>
+        </g>
+    `;
+}
+
+function renderFootingTab(res) {
+    const { heel, toe, geo } = res;
+    const okHeelShear = heel.VuHeel <= heel.phiVcFoot;
+    const okToeShear = toe.VuToeMax <= toe.phiVcFoot;
+
+    document.getElementById('badge-heel').innerHTML = badgeHTML(okHeelShear, 'CORTANTE OK', 'REVISAR hf');
+    document.getElementById('badge-toe').innerHTML = badgeHTML(okToeShear, 'CORTANTE OK', 'REVISAR hf');
+
+    document.getElementById('heel-details').innerHTML = `
+        <div class="w3-row-padding" style="margin: 0 -4px;">
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px 10px;">
+                    <span class="valor-sutil" style="display:block;">Voladizo Talón L<sub>h</sub></span>
+                    <span class="mono" style="font-weight:700;">${fmt(geo.Lh, 2)} m</span>
+                </div>
+            </div>
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px 10px;">
+                    <span class="valor-sutil" style="display:block;">Carga w<sub>u</sub> desc.</span>
+                    <span class="mono" style="font-weight:700; color:var(--accent);">${fmt(heel.wuHeel, 1)} kPa</span>
+                </div>
+            </div>
+            <div class="w3-col s4">
+                <div class="caja-metrica" style="padding:8px 10px;">
+                    <span class="valor-sutil" style="display:block;">Peralte d<sub>zapata</sub></span>
+                    <span class="mono" style="font-weight:700;">${fmt(heel.dFootMm, 0)} mm</span>
+                </div>
+            </div>
+        </div>
+        <div class="caja-metrica mono" style="font-size:0.84em;">
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">V<sub>u,talón</sub> vs φV<sub>c</sub>:</span>
+                <span style="font-weight:700; color:${okHeelShear ? 'var(--success)' : 'var(--warning)'};">${fmt(heel.VuHeel, 1)} / ${fmt(heel.phiVcFoot, 1)} kN/m</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">M<sub>u,talón</sub> (cara vástago):</span>
+                <span style="font-weight:700;">${fmt(heel.MuHeel, 2)} kN·m/m</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border-light); padding-top:4px; margin-top:4px;">
+                <span style="color:var(--secondary);">A<sub>s,req</sub> / A<sub>s,mín</sub> / A<sub>s,dis</sub>:</span>
+                <span>${Math.round(heel.flexure.AsReq)} / ${Math.round(heel.flexure.AsMin)} / <b style="color:var(--accent);">${Math.round(heel.flexure.AsDesign)} mm²/m</b></span>
+            </div>
+        </div>
+    `;
+    document.getElementById('tbody-heel-bars').innerHTML = renderBarsTableHTML(heel.flexure);
+
+    document.getElementById('tbody-toe-combos').innerHTML = toe.combos.map((c) => {
+        const isGov = c.id === toe.govCombo.id;
+        return `
+            <tr class="${isGov ? 'fila-gobernante' : ''}">
+                <td>${c.label} ${isGov ? '★' : ''}</td>
+                <td>${fmt(c.qToe, 1)} kPa</td>
+                <td>${fmt(c.Vu, 1)}</td>
+                <td>${fmt(c.Mu, 2)}</td>
+            </tr>
+        `;
+    }).join('');
+
+    document.getElementById('toe-details').innerHTML = `
+        <div class="caja-metrica mono" style="font-size:0.84em;">
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">Voladizo Puntera L<sub>t</sub>:</span>
+                <span style="font-weight:700;">${fmt(geo.Lt, 2)} m</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">V<sub>u,puntera,máx</sub> vs φV<sub>c</sub>:</span>
+                <span style="font-weight:700; color:${okToeShear ? 'var(--success)' : 'var(--warning)'};">${fmt(toe.VuToeMax, 1)} / ${fmt(toe.phiVcFoot, 1)} kN/m</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+                <span style="color:var(--secondary);">M<sub>u,puntera</sub> Gobernante:</span>
+                <span style="font-weight:700; color:var(--accent);">${fmt(toe.govCombo.Mu, 2)} kN·m/m (${toe.govCombo.label})</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; border-top:1px solid var(--border-light); padding-top:4px; margin-top:4px;">
+                <span style="color:var(--secondary);">A<sub>s,req</sub> / A<sub>s,mín</sub> / A<sub>s,dis</sub>:</span>
+                <span>${Math.round(toe.flexure.AsReq)} / ${Math.round(toe.flexure.AsMin)} / <b style="color:var(--accent);">${Math.round(toe.flexure.AsDesign)} mm²/m</b></span>
+            </div>
+        </div>
+    `;
+    document.getElementById('tbody-toe-bars').innerHTML = renderBarsTableHTML(toe.flexure);
+}
+
+function renderReportTab(res) {
+    const { inputs, geo, stem, heel, toe, predim } = res;
+    const pickBestBar = (flex) => {
+        const ideal = flex.proposals.find((p) => p.ok && p.sRounded >= 0.12 && p.sRounded <= 0.25)
+            || flex.proposals.find((p) => p.ok)
+            || flex.proposals[2];
+        return `N°${ideal.num} @ ${fmt(ideal.sRounded, 2)} m (${Math.round(ideal.AsProvided)} mm²/m)`;
+    };
+
+    document.getElementById('report-content').innerHTML = `
+        <div class="w3-row-padding" style="margin: 0 -8px;">
+            <div class="w3-col l6 m12">
+                <div class="caja-metrica">
+                    <span style="display:block; color:var(--primary); font-weight:700; font-size:0.85em; text-transform:uppercase; margin-bottom:6px;">1. Geometría Final Adoptada</span>
+                    <ul class="mono" style="margin:0; padding-left:18px; font-size:0.85em; line-height:1.7;">
+                        <li>Altura libre del vástago (H): <b>${fmt(geo.H, 2)} m</b></li>
+                        <li>Espesor uniforme del vástago (t<sub>w</sub>): <b>${fmt(geo.tw, 2)} m</b> (Barra pre: N°${predim.assumedBarEighths})</li>
+                        <li>Espesor de la zapata (h<sub>f</sub>): <b>${fmt(geo.hf, 2)} m</b></li>
+                        <li>Longitud de puntera (L<sub>t</sub>): <b>${fmt(geo.Lt, 2)} m</b></li>
+                        <li>Longitud de talón (L<sub>h</sub>): <b>${fmt(geo.Lh, 2)} m</b></li>
+                        <li>Ancho total de zapata (B): <b>${fmt(geo.B, 2)} m</b></li>
+                        <li>Profundidad dentellón bajo vástago (d<sub>k</sub>): <b>${fmt(geo.dk, 2)} m</b></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="w3-col l6 m12">
+                <div class="caja-metrica">
+                    <span style="display:block; color:var(--primary); font-weight:700; font-size:0.85em; text-transform:uppercase; margin-bottom:6px;">2. Chequeos de Estabilidad Geotécnica</span>
+                    <ul class="mono" style="margin:0; padding-left:18px; font-size:0.85em; line-height:1.7;">
+                        <li>FS Volcamiento (D + P<sub>a1</sub>): <b>${fmt(geo.fsVolc, 2)}</b> (Mín. ${fmt(inputs.fsVolcMin, 1)}) → ${geo.fsVolc >= inputs.fsVolcMin ? 'CUMPLE' : 'REVISAR'}</li>
+                        <li>Compresión basal (D + P<sub>a1</sub>): q<sub>mín</sub> = <b>${fmt(geo.caseDH.base.qMin, 1)} kPa</b> ≥ 0</li>
+                        <li>FS Deslizamiento (D + P<sub>a1</sub>): <b>${fmt(geo.fsDeslFinal, 2)}</b> (Mín. ${fmt(inputs.fsDeslMin, 1)}) → ${geo.fsDeslFinal >= inputs.fsDeslMin ? 'CUMPLE' : 'REVISAR'}</li>
+                        <li>Presión máx. servicio (D + P<sub>a1</sub>): <b>${fmt(geo.caseDH.base.qMax, 1)} kPa</b> ≤ ${fmt(inputs.qAdm, 0)} kPa</li>
+                        <li>Presión máx. servicio (D + P<sub>a1</sub> + q<sub>L</sub>): <b>${fmt(geo.caseDHL.base.qMax, 1)} kPa</b> ≤ ${fmt(inputs.qAdm, 0)} kPa</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="caja-metrica">
+            <span style="display:block; color:var(--primary); font-weight:700; font-size:0.85em; text-transform:uppercase; margin-bottom:8px;">3. Resumen Diseño Estructural (f'<sub>c</sub> = ${fmt(inputs.fc, 0)} MPa, f<sub>y</sub> = ${fmt(inputs.fy, 0)} MPa, r = ${inputs.recubMm} mm)</span>
+            <div style="overflow-x:auto;">
+                <table class="tabla-ce mono">
+                    <thead>
+                        <tr>
+                            <th>Elemento</th>
+                            <th>V<sub>u</sub> / φV<sub>c</sub> (kN/m)</th>
+                            <th>M<sub>u</sub> (kN·m/m)</th>
+                            <th>A<sub>s,diseño</sub> (mm²/m)</th>
+                            <th>Propuesta Sugerida</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="font-family:'Inter',sans-serif; font-weight:600;">Vástago (Cara Interna)</td>
+                            <td>${fmt(stem.VuStemMax, 1)} / ${fmt(stem.phiVcStem, 1)}</td>
+                            <td>${fmt(stem.MuStemGov, 2)}</td>
+                            <td><b>${Math.round(stem.flexure.AsDesign)}</b></td>
+                            <td style="color:var(--success); font-weight:700;">${pickBestBar(stem.flexure)}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-family:'Inter',sans-serif; font-weight:600;">Talón (Acero Superior)</td>
+                            <td>${fmt(heel.VuHeel, 1)} / ${fmt(heel.phiVcFoot, 1)}</td>
+                            <td>${fmt(heel.MuHeel, 2)}</td>
+                            <td><b>${Math.round(heel.flexure.AsDesign)}</b></td>
+                            <td style="color:var(--success); font-weight:700;">${pickBestBar(heel.flexure)}</td>
+                        </tr>
+                        <tr>
+                            <td style="font-family:'Inter',sans-serif; font-weight:600;">Puntera (Acero Inferior)</td>
+                            <td>${fmt(toe.VuToeMax, 1)} / ${fmt(toe.phiVcFoot, 1)}</td>
+                            <td>${fmt(toe.govCombo.Mu, 2)}</td>
+                            <td><b>${Math.round(toe.flexure.AsDesign)}</b></td>
+                            <td style="color:var(--success); font-weight:700;">${pickBestBar(toe.flexure)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="caja-metrica" style="margin-bottom:0;">
+            <span style="display:block; color:var(--primary); font-weight:700; font-size:0.85em; text-transform:uppercase; margin-bottom:8px;">4. Hipótesis y Alcance del Modelo</span>
+            <table class="tabla-ce">
+                <thead>
+                    <tr>
+                        <th style="width:28%;">Aspecto del Modelo</th>
+                        <th>Tratamiento en la Presente Versión</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><b>Nivel freático</b></td><td>Se asume relleno drenado y suelo seco (sin presión hidrostática).</td></tr>
+                    <tr><td><b>Geometría del relleno</b></td><td>Superficie horizontal (i = 0°) y trasdós vertical.</td></tr>
+                    <tr><td><b>Parámetros de corte</b></td><td>Suelo granular friccionante (c = 0).</td></tr>
+                    <tr><td><b>Estabilidad global y asentamientos</b></td><td>Verificaciones geotécnicas externas fuera del alcance de este módulo.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    `;
+}
+
+// ===========================================================================
+// PERSISTENCIA LOCALSTORAGE Y EVENT LISTENERS
+// ===========================================================================
+const INPUT_IDS = [
+    'in-hmuro', 'in-ql', 'in-h1-mode', 'in-ka-auto', 'in-ka',
+    'in-ptop-man', 'in-pbot-man', 'in-h2-mode', 'in-pstop', 'in-psbot',
+    'in-kh', 'in-kv', 'in-gammas', 'in-gammac', 'in-phi', 'in-delta',
+    'in-qadm', 'in-fc', 'in-fy', 'in-recub', 'in-fsvolc', 'in-fsdesl',
+    'in-toe-ratio', 'in-use-key', 'in-passive-factor'
+];
+
+function guardarConfiguracion() {
+    const cfg = {};
+    INPUT_IDS.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        cfg[id] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    localStorage.setItem(CLAVE_STORAGE, JSON.stringify(cfg));
+}
+
+function cargarConfiguracion() {
+    const raw = localStorage.getItem(CLAVE_STORAGE);
+    if (!raw) return;
+    try {
+        const cfg = JSON.parse(raw);
+        INPUT_IDS.forEach((id) => {
+            const el = document.getElementById(id);
+            if (!el || cfg[id] === undefined) return;
+            if (el.type === 'checkbox') el.checked = Boolean(cfg[id]);
+            else el.value = cfg[id];
+        });
+    } catch (e) { /* ignorar si corrupto */ }
+}
+
+function restaurarValoresDefault() {
+    if (confirm('¿Deseas restablecer los parámetros del muro a sus valores iniciales?')) {
+        localStorage.removeItem(CLAVE_STORAGE);
+        location.reload();
+    }
+}
+
+document.querySelectorAll('.tab-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+        const target = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-panel').forEach((p) => { p.style.display = 'none'; });
+        document.getElementById(target).style.display = 'block';
+    });
+});
+
+INPUT_IDS.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('input', runEngineeringDesign);
+        el.addEventListener('change', runEngineeringDesign);
+    }
+});
+
+document.getElementById('svg-pressure-combo').addEventListener('change', () => {
+    if (lastResults) renderWallSVG(lastResults);
+});
+
+['sel-stem-bar', 'in-stem-spacing', 'in-stem-cutoff-enable', 'in-stem-cutoff-h'].forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+        el.addEventListener('input', () => { if (lastResults) renderStemMomentDiagram(lastResults); });
+        el.addEventListener('change', () => { if (lastResults) renderStemMomentDiagram(lastResults); });
+    }
+});
+
+document.getElementById('btn-copy-report').addEventListener('click', () => {
+    if (!lastResults) return;
+    const { geo, inputs, stem, heel, toe } = lastResults;
+    const text = [
+        'CRITERIO ESTRUCTURAL — DISEÑO DE MURO DE CONTENCIÓN EN VOLADIZO (NSR-10 / CCP-14)',
+        `Geometría: H=${fmt(geo.H)}m | tw=${fmt(geo.tw)}m | hf=${fmt(geo.hf)}m | Lt=${fmt(geo.Lt)}m | Lh=${fmt(geo.Lh)}m | B=${fmt(geo.B)}m | Dentellón dk=${fmt(geo.dk)}m`,
+        `Estabilidad (D+Pa1): FS_volc=${fmt(geo.fsVolc)} (mín ${fmt(inputs.fsVolcMin, 1)}) | q_min=${fmt(geo.caseDH.base.qMin, 1)} kPa | FS_desl=${fmt(geo.fsDeslFinal)} (mín ${fmt(inputs.fsDeslMin, 1)})`,
+        `Servicio Portante: q_max(D+Pa1)=${fmt(geo.caseDH.base.qMax, 1)} kPa | q_max(D+Pa1+qL)=${fmt(geo.caseDHL.base.qMax, 1)} kPa <= q_adm=${fmt(inputs.qAdm, 0)} kPa`,
+        `Vástago (Cara Int.): Vu1=${fmt(stem.VuStem1, 1)} / Vu2=${fmt(stem.VuStem2, 1)} <= phiVc=${fmt(stem.phiVcStem, 1)} kN/m | Mu=${fmt(stem.MuStemGov, 2)} kN·m/m | As=${Math.round(stem.flexure.AsDesign)} mm²/m`,
+        `Talón (Superior): Vu=${fmt(heel.VuHeel, 1)} <= phiVc=${fmt(heel.phiVcFoot, 1)} kN/m | Mu=${fmt(heel.MuHeel, 2)} kN·m/m | As=${Math.round(heel.flexure.AsDesign)} mm²/m`,
+        `Puntera (Inferior): Vu=${fmt(toe.VuToeMax, 1)} <= phiVc=${fmt(toe.phiVcFoot, 1)} kN/m | Mu=${fmt(toe.govCombo.Mu, 2)} kN·m/m | As=${Math.round(toe.flexure.AsDesign)} mm²/m`
+    ].join('\n');
+
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+
+    const toast = document.getElementById('toast-msg');
+    toast.style.display = 'block';
+    setTimeout(() => { toast.style.display = 'none'; }, 2600);
+});
+
+window.onload = () => {
+    cargarConfiguracion();
+    runEngineeringDesign();
+};
+</script>
+
+</body>
+</html>
